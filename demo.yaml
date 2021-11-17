@@ -1,0 +1,49 @@
+title: Demo
+cells:
+  - id: 0
+    title: Ex 1
+    text: |
+      This is markdwon and stuff.
+      Or not.
+    code: |
+      msg = 'Hello'
+      print(msg)
+    output: ''
+    check: |
+      def check(scope, output):
+        return 'msg' in scope.keys() and scope['msg'] == 'Hello'
+    response:
+      type: passed
+      message: 'Well done.'
+    passed: true
+  - id: 1
+    title: Ex 2
+    text: |
+      Yes.
+      Do something
+    code: |
+      a =
+    output: ''
+    check: |
+      def check(scope, output):
+        return 'a' in scope.keys()
+    response:
+      type: failed
+      message: 'Maybe next time.'
+    passed: false
+  - id: 2
+    title: Ex 3
+    text: |
+      You should really do something.
+      Or not.
+    code: |
+      a = 0
+      print(b == )
+    output: ''
+    check: |
+      def check(scope, output):
+        return 'True' in output
+    response:
+      type: untouched
+      message: ''
+    passed: false
