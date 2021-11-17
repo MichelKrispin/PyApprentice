@@ -64,8 +64,7 @@ ws.onmessage = function (evt) {
               </div>
               <div class="editor" id="editor-${cell['id']}"></div>
           `;
-            if (cell['output']) {
-                cells_html[cell['id']] += `
+            cells_html[cell['id']] += `
                 <article class="message is-${cell['response']}">
                   <div class="message-body" style="font-family: monospace">
                     <p>
@@ -74,7 +73,6 @@ ws.onmessage = function (evt) {
                   </div>
                 </article>
             `;
-            }
         }
         cells_html[cell['id']] += '</div>';
     });
@@ -97,7 +95,6 @@ ws.onmessage = function (evt) {
 };
 
 function runCell(id) {
-    console.log();
     ws.send(
         JSON.stringify({
             id: id,

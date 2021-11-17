@@ -1,12 +1,13 @@
 title: Demo
-global-code: '# Write global code here'
+global-code: "# Write global code here\ndef something():\n    print('Hello World')"
 passed: 0
 cells:
   - id: 0
     title: Hello World
     text: |
-      This is markdown and stuff.
-      Or not.
+      This is the markdown area.
+
+      Everything that markdown supports is possible, like py`a = 10 if 10.0 == b else True`.
     code: |
       print('Hello, World!')
     output: ''
