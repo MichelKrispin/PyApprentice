@@ -17,7 +17,6 @@ const smallerGutterRenderer = {
     }
 };
 
-
 let editors = {
     'global-editor': ace.edit('global-editor', default_settings),
 };
@@ -28,6 +27,9 @@ function resizeEditor(id, numLines) {
         numLines * editor.renderer.lineHeight + 'px';
     editors[id].resize();
 }
+
+// For markdown conversion
+const converter = new showdown.Converter({'tables': true});
 
 /* Check for the WebSocket connection and act appropiately. */
 let ws = new WebSocket('ws://localhost:8000/ws');
@@ -60,7 +62,7 @@ ws.onmessage = function (evt) {
                 </div>
               </div>
               <div class="block">
-              ${cell['text']}
+              ${converter.makeHtml(cell['text'])}
               </div>
               <div class="editor" id="editor-${cell['id']}"></div>
           `;
@@ -92,6 +94,16 @@ ws.onmessage = function (evt) {
             editors[`editor-${cell['id']}`] = editor;
         }
     });
+
+    // After updating everything set the css classes to header
+    ['h2', 'h3', 'h4', 'h5'].forEach((h) => {
+        const elements = document.getElementsByTagName(h);
+        for (let i = 0; i < elements.length; i++) {
+            const el = elements[i];
+            el.setAttribute('class', 'title is-' + (parseInt(h[1]) + 3));
+        }
+    })
+
 };
 
 function runCell(id) {

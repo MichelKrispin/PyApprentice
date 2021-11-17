@@ -1,13 +1,25 @@
 title: Demo
 global-code: "# Write global code here\ndef something():\n    print('Hello World')"
-passed: 0
+passed: 1
 cells:
   - id: 0
     title: Hello World
     text: |
-      This is the markdown area.
+      ## This is the markdown area.
 
-      Everything that markdown supports is possible, like py`a = 10 if 10.0 == b else True`.
+      Everything that markdown supports is possible, like `a = 10 if 10.0 == b else True`.
+
+      Or maybe a list such as:
+      1. First you need to do this
+      2. And then that
+
+      ### Tables are also okay
+
+      | Left   | Center  | Right |
+      | ------ |:-------:| -----:|
+      | 2      | hot     |  Yes  |
+      | 1      | cold    |   No  |
+
     code: |
       print('Hello, World!')
     output: ''
