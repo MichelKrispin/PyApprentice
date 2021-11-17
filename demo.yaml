@@ -1,21 +1,19 @@
 title: Demo
+global-code: '# Write global code here'
+passed: 0
 cells:
   - id: 0
-    title: Ex 1
+    title: Hello World
     text: |
-      This is markdwon and stuff.
+      This is markdown and stuff.
       Or not.
     code: |
-      msg = 'Hello'
-      print(msg)
+      print('Hello, World!')
     output: ''
     check: |
       def check(scope, output):
-        return 'msg' in scope.keys() and scope['msg'] == 'Hello'
-    response:
-      type: passed
-      message: 'Well done.'
-    passed: true
+        return 'Hello, World!' in output
+    response: success
   - id: 1
     title: Ex 2
     text: |
@@ -27,10 +25,7 @@ cells:
     check: |
       def check(scope, output):
         return 'a' in scope.keys()
-    response:
-      type: failed
-      message: 'Maybe next time.'
-    passed: false
+    response: danger
   - id: 2
     title: Ex 3
     text: |
@@ -43,7 +38,4 @@ cells:
     check: |
       def check(scope, output):
         return 'True' in output
-    response:
-      type: untouched
-      message: ''
-    passed: false
+    response: danger

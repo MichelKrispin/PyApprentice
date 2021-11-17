@@ -107,11 +107,12 @@ class CellHandler:
 
         # Save data
         self.data['global-code'] = global_code
+        if result and self.data['passed'] <= id:
+            self.data['passed'] = id + 1
         cell['code'] = code
         cell['output'] = tornado.escape.xhtml_escape(
             output).replace('\n', '<br>').replace('  ', '&nbsp;&nbsp;')
-        cell['passed'] = result
-        cell['response']['type'] = 'exception' if caught_exception else ('passed' if result else 'failed')
+        cell['response'] = 'danger' if caught_exception else ('success' if result else 'warning')
         self.save()
         return output, result
 

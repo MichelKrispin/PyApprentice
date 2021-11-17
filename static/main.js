@@ -32,7 +32,7 @@ function resizeEditor(id, numLines) {
 /* Check for the WebSocket connection and act appropiately. */
 let ws = new WebSocket('ws://localhost:8000/ws');
 ws.onopen = function () {
-    // ws.send('Hello, world');
+    console.log('PyApprentice successfully connected.\n\n\t🎉 Have fun 🎉\n\n');
 };
 ws.onmessage = function (evt) {
     data = JSON.parse(evt.data);
@@ -40,48 +40,59 @@ ws.onmessage = function (evt) {
     document.getElementById('title').innerHTML = data['title'];
     cells_html = Array.from(' '.repeat(data['cells'].length));
     data['cells'].forEach((cell) => {
-        cells_html[cell['id']] = `
-        <div class="box">
-          <div class="columns is-vcentered">
-            <div class="column">
-              <p class="title is-4">${cell['title']}</p>
-            </div>
-            <div class="column">
-              <button
-                class="button is-primary is-pulled-right"
-                onclick="runCell(${cell['id']})"
-              >
-                <span>Run</span>
-                <span class="icon is-small">
-                  <i class="fas fa-play"></i>
-                </span>
-              </button>
-            </div>
-          </div>
-          <div class="block">
-          ${cell['text']}
-          </div>
-          <div class="editor" id="editor-${cell['id']}"></div>
-      `;
-        if (cell['output']) {
-            cells_html[cell['id']] += `
-            <article class="message">
-              <div class="message-body" style="font-family: monospace">
-                <p>
-                  ${cell['output']}
-                </p>
+        if (cell['id'] <= data['passed']) {
+            cells_html[cell['id']] = `
+            <div class="box">
+              <div class="columns is-vcentered">
+                <div class="column">
+                  <p class="title is-4">${cell['title']}</p>
+                </div>
+                <div class="column">
+                  <button
+                    class="button is-primary is-pulled-right"
+                    onclick="runCell(${cell['id']})"
+                  >
+                    <span>Run</span>
+                    <span class="icon is-small">
+                      <i class="fas fa-play"></i>
+                    </span>
+                  </button>
+                </div>
               </div>
-            </article>
-        `;
+              <div class="block">
+              ${cell['text']}
+              </div>
+              <div class="editor" id="editor-${cell['id']}"></div>
+          `;
+            if (cell['output']) {
+                cells_html[cell['id']] += `
+                <article class="message is-${cell['response']}">
+                  <div class="message-body" style="font-family: monospace">
+                    <p>
+                      ${cell['output']}
+                    </p>
+                  </div>
+                </article>
+            `;
+            }
         }
         cells_html[cell['id']] += '</div>';
     });
     document.getElementById('tasks').innerHTML = cells_html.join('\n');
     data['cells'].forEach((cell) => {
-        let editor = ace.edit(`editor-${cell['id']}`, default_settings);
-        editor.session.gutterRenderer = smallerGutterRenderer;
-        editor.setValue(cell['code']);
-        editors[`editor-${cell['id']}`] = editor;
+        if (cell['id'] <= data['passed']) {
+            let editor = ace.edit(`editor-${cell['id']}`, default_settings);
+            editor.session.gutterRenderer = smallerGutterRenderer;
+            editor.commands.addCommand({
+                name: "sendCell",
+                bindKey: {win: "Ctrl-Enter"},
+                exec: function (editor) {
+                    runCell(cell['id']);
+                }
+            });
+            editor.setValue(cell['code']);
+            editors[`editor-${cell['id']}`] = editor;
+        }
     });
 };
 
