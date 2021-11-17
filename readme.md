@@ -1,16 +1,6 @@
-public_variable = 10
+# PyApprentice
 
-private_variable = 2
-
-def public_function():
-    return "public information"
-
-def private_function():
-    return "super sensitive information"
-
-safe_list = ['public_variable', 'public_function']
-safe_dict = dict([ (k, locals().get(k, None)) for k in safe_list ])
-# add any needed builtins back in
-safe_dict['len'] = len
-
-eval("public_variable+2", {"__builtins__" : None }, safe_dict)
+A project to help someone learn Python.
+It is based on the idea of notebooks, but here, each cell has its individual scope and is evaluated on its own.
+The resulting scope of this cell as well as the output can then be checked for something that should be there and tell the user whether the task was successfully solved.
+Every cell can make use of globally defined functions, which get injected into the scope of every cell beforehand.
