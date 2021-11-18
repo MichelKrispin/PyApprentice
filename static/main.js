@@ -4,7 +4,7 @@ const default_settings = {
     wrap: true,
     theme: 'ace/theme/solarized_dark',
     mode: 'ace/mode/python',
-    fontSize: '16pt',
+    fontSize: '14pt',
 };
 
 // Make the gutter smaller
@@ -22,10 +22,10 @@ let editors = {
 };
 editors['global-editor'].session.gutterRenderer = smallerGutterRenderer
 
-function resizeEditor(id, numLines) {
+function resizeEditor(editor, id, numLines) {
     document.getElementById(id).style.height =
         numLines * editor.renderer.lineHeight + 'px';
-    editors[id].resize();
+    editor.resize();
 }
 
 // For markdown conversion
@@ -44,7 +44,7 @@ ws.onmessage = function (evt) {
     data['cells'].forEach((cell) => {
         if (cell['id'] <= data['passed']) {
             cells_html[cell['id']] = `
-            <div class="box">
+            <div class="box content">
               <div class="columns is-vcentered">
                 <div class="column">
                   <p class="title is-4">${cell['title']}</p>
@@ -91,6 +91,7 @@ ws.onmessage = function (evt) {
                 }
             });
             editor.setValue(cell['code']);
+            resizeEditor(editor, `editor-${cell['id']}`, 10);
             editors[`editor-${cell['id']}`] = editor;
         }
     });

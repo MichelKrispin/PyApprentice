@@ -1,0 +1,107 @@
+title: Starterpack
+global-code: "# Hier kommen globale Funktionen rein"
+passed: 0
+cells:
+  - id: 0
+    title: Hello World
+    text: |
+      Also das ganze funktioniert so:
+      - Oben recht ist der `Run`-Button zum ausführen einer Zelle.
+      - Eine rote Ausgabe heißt, dass der Pythoncode einen Fehler hat.
+      - Eine gelbe Ausgabe heißt, dass das Ergebnis nicht korrekt ist.
+      - Eine grüne Ausgabe heißt, dass das Ergebnis korrekt ist.
+
+      Wenn das Ergebnis korrekt ist erscheint eine neue Aufgabe.
+
+      Die Datei sollte automatisch speichern und kann beim nächsten Start wieder
+      da fortgesetzt werden wo sie geschlossen wurde.
+
+      ### Der Test
+      Das probieren wir doch gleich mal. Oben auf ´Run´ zu drücken, sollte
+      zu einer roten Ausgabe führen. Es fehlt schließlich eine Klammer (`print('Hello, World')`).
+      Das sollte irgendwie so oder so ähnlich auch in der (roten) Ausgabe stehen.
+
+      Wenn die Klammer da ist, sollte die Ausgabe gelb werden und nur noch `Hello, World`
+      da stehen. Schließlich geben wir das aus (`print`).
+
+      Damit es weitergeht, sollte `Hello, World!` ausgegeben werden.
+    code: |
+      print('Hello, World'
+    output: ''
+    check: |
+      def check(scope, output):
+        return 'Hello, World!' in output
+    response: warning
+  - id: 1
+    title: Kommentare
+    text: |
+      Wir fangen mal klein an.
+      Code wird immer Zeile für Zeile geschrieben und in Python muss
+      jede Zeile korrekt eingerückt werden (also im MOment noch ganz links anfangen)
+      Wenn vor einer Zeile ein `#` steht, dann ist diese Zeile auskommentiert und wird ignoriert.
+
+      Mache aus den richtigen Zeilen wieder Code, der nicht als Kommentar interpretiert wird,
+      indem die ´#´ an den richtigen Stellen entfernt werden
+      (und dann auch die Leerzeichen direkt dahinter; Stichwort ganz links anfangen).
+    code: |
+      # Diese Zeile beschreibt nur etwas (und das nicht sehr gut...)
+      # message = 'Hallo'
+      # print(message)  # Hier wird wieder etwas ausgegeben
+    output: ''
+    check: |
+      def check(scope, output):
+        return 'message' in scope.keys() and 'Hallo' in output
+    response: warning
+  - id: 2
+    title: Motivation
+    text: |
+      Wir fangen mal an, indem wir einen Taschenrechner bauen,
+      der das bezahlte Restaurantgeld durch die Anzahl der Personen teilt.
+      Wenn ein Essen 100€ gekostet hat und 10 Leute mitgegessen haben,
+      dann kostet der Spaß 10€ pro Person.
+
+      Das Prinzip hier ist, dass der fertige Code hier einmal steht,
+      das heißt, dass er überflogen werden kann, aber was das alles heißt,
+      schauen wir uns danach im Detail an.
+
+      (Ich kündige schonmal an, dass das Beispiel etwas... 'konstruiert' ist.
+      Es wird später noch aufregender, aber hier sehen wir schonmal alle wichtigen Teile.)
+
+      Dafür kopier den folgenden Code in das rechte 'Global Functions' Fenster (und überschreib alles andere darin).
+      ```py
+      class RestaurantBesuch:
+          def __init__(self, restaurant_name, max_besucher=15):
+              self.restaurant_name = restaurant_name
+              self.max_besucher = max_besucher
+              self.kosten = 0.0
+
+          def gericht(self, kosten):
+              self.kosten += kosten
+
+          def gesamt_kosten(self, anzahl_besucher):
+              if anzahl_besucher > self.max_besucher:
+                  raise Exception('So viele Leute sind nicht gut für die Geldbörse')
+              return self.kosten / anzahl_besucher
+
+      def gesamt_kosten(restaurant_besuch, anzahl_besucher):
+          print(f'Die Gesamtkosten im {restaurant_besuch.restaurant_name} '
+                f'betragen {restaurant_besuch.gesamt_kosten(anzahl_besucher):.2f}€')
+      ```
+
+      Insgesamt ist es wohl sehr hilfreich mal an den einzelnen Werten (unter dem `---` Kommentar) herumzuspielen.
+      Also den Name vom Restaurant mal ändern, oder die Preise der einzelnen Gerichte.
+      Um hier weiterzukommen, müssen 5 Leute mitessen.
+    code: |
+      lieblings_restaurant = 'Burger Donalds'  # Name vom Restaurant
+      burger_donalds = RestaurantBesuch(lieblings_restaurant)
+      burger_donalds.gericht(10)  # Kosten vom ersten Gericht (10)
+      burger_donalds.gericht(15)  # Kosten vom zweiten
+      burger_donalds.gericht(8)   # Kosten vom dritte)n
+
+      mitesser = 4  # Anzahl der Mitessenden
+      gesamt_kosten(mitesser)  # Gib die Gesamtkosten aus
+    output: ''
+    check: |
+      def check(scope, output):
+        return 'mitesser' in scope.keys() and scope['mitesser'] == 5
+    response: warning

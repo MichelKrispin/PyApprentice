@@ -14,7 +14,7 @@ from contextlib import redirect_stdout
 
 class CellHandler:
     def __init__(self):
-        self.file_name = 'demo.yaml'
+        self.file_name = 'Notebooks/beginner_.yaml'
         with open(self.file_name, 'r') as f:
             self.data = yaml.safe_load(f)
 
