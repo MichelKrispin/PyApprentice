@@ -66,15 +66,29 @@ ws.onmessage = function (evt) {
               </div>
               <div class="editor" id="editor-${cell['id']}"></div>
           `;
-            cells_html[cell['id']] += `
-                <article class="message is-${cell['response']}">
+            if (cell['response']['display'] !== 'none') {
+                cells_html[cell['id']] += `
+                <article class="message is-${cell['response']['display']}">
                   <div class="message-body" style="font-family: monospace">
                     <p>
                       ${cell['output']}
                     </p>
                   </div>
                 </article>
+                `;
+
+                if (cell['response']['message']) {
+                    cells_html[cell['id']] += `
+                <article class="message">
+                  <div class="message-body" style="font-family: monospace">
+                    <p>
+                      ${cell['response']['message']}
+                    </p>
+                  </div>
+                </article>
             `;
+                }
+            }
         }
         cells_html[cell['id']] += '</div>';
     });

@@ -1,54 +1,72 @@
-title: Demo
+cells:
+- check: "def check(scope, output):\n  return 'Hello, World!' in output\n"
+  code: 'print(''Hello, World!'')
+
+    '
+  id: 0
+  output: Hello, World!<br>
+  response:
+    display: success
+    message: 'Well done.'
+  text: '## This is the markdown area.
+
+
+    Everything that markdown supports is possible, like `a = 10 if 10.0 == b else
+    True`.
+
+
+    Or maybe a list such as:
+
+    1. First you need to do this
+
+    2. And then that
+
+
+    ### Tables are also okay
+
+
+    | Left   | Center  | Right |
+
+    | ------ |:-------:| -----:|
+
+    | 2      | hot     |  Yes  |
+
+    | 1      | cold    |   No  |
+
+    '
+  title: Hello World
+- check: "def check(scope, output):\n  return 'a' in scope.keys()\n"
+  code: 'a =
+
+    '
+  id: 1
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: 'Yes.
+
+    Do something
+
+    '
+  title: Ex 2
+- check: "def check(scope, output):\n  return 'True' in output\n"
+  code: 'a = 0
+
+    print(b == )
+
+    '
+  id: 2
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: 'You should really do something.
+
+    Or not.
+
+    '
+  title: Ex 3
 global-code: "# Write global code here\ndef something():\n    print('Hello World')"
 passed: 1
-cells:
-  - id: 0
-    title: Hello World
-    text: |
-      ## This is the markdown area.
-
-      Everything that markdown supports is possible, like `a = 10 if 10.0 == b else True`.
-
-      Or maybe a list such as:
-      1. First you need to do this
-      2. And then that
-
-      ### Tables are also okay
-
-      | Left   | Center  | Right |
-      | ------ |:-------:| -----:|
-      | 2      | hot     |  Yes  |
-      | 1      | cold    |   No  |
-
-    code: |
-      print('Hello, World!')
-    output: ''
-    check: |
-      def check(scope, output):
-        return 'Hello, World!' in output
-    response: success
-  - id: 1
-    title: Ex 2
-    text: |
-      Yes.
-      Do something
-    code: |
-      a =
-    output: ''
-    check: |
-      def check(scope, output):
-        return 'a' in scope.keys()
-    response: danger
-  - id: 2
-    title: Ex 3
-    text: |
-      You should really do something.
-      Or not.
-    code: |
-      a = 0
-      print(b == )
-    output: ''
-    check: |
-      def check(scope, output):
-        return 'True' in output
-    response: danger
+title: Demo
