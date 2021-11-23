@@ -128,13 +128,13 @@ def main(file_name):
     while True:
         event, values = window.read()
         if event == sg.WIN_CLOSED or event == 'Quit':
-            values = {
-                'code': window['code'].DefaultText,
-                'title': window['title'].DefaultText,
-                'text': window['text'].DefaultText,
-                'check': window['check'].DefaultText,
-            }
-            save_data(data, values, file_name, last_id, close=True)
+            # values = {
+            #     'code': window['code'].DefaultText,
+            #     'title': window['title'].DefaultText,
+            #     'text': window['text'].DefaultText,
+            #     'check': window['check'].DefaultText,
+            # }
+            # save_data(data, values, file_name, last_id, close=True)
             break
         if event == 'Save':
             save_data(data, values, file_name, last_id)
@@ -145,7 +145,8 @@ def main(file_name):
             except ValueError:
                 print('ID field has to be an integer value')
                 continue
-            update_display(data, window, i)
+            last_id = i
+            update_display(data, window, last_id)
         elif event == 'Add Field':
             i = get_highest_id(data)
             data['cells'].append({

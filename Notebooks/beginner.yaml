@@ -1,28 +1,31 @@
 cells:
-- check: " \ndef _Check(scope, output):\n    if \"\" in output:\n        return True,\
-    \ 'Wundervoll.'\n    elif 'Traceback' in output:\n        return False, 'Exception'\n\
-    \    else:\n        return False, 'Und so sieht es aus, wenn es noch nicht ganz\
-    \ richtig ist.'"
-  code: |2-
-
-    # Python Code
-    print('Hello')
+- check: "def _Check(scope, output):\n  if 'Hello, World!' in output:\n    return\
+    \ True, 'Ganz sicher.'\n  elif 'Traceback' in output:\n    return False, 'Wenigstens\
+    \ wei\xDFt Du jetzt wie ein Python Fehler aussieht.'\n  else:\n    return False,\
+    \ 'Und so sieht es aus, wenn das Ergebnis noch nicht stimmt.'"
+  code: print('Hello, World'
   id: 0
-  output: 'Traceback (most recent call last):<br>&nbsp;&nbsp;File &quot;Hello World&quot;,
-    line 2<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;^<br>SyntaxError:
-    unexpected EOF while parsing<br>'
+  output: ''
   response:
-    display: danger
-    message: "Naja. Wenigstens wei\xDFt Du jetzt wie eine Fehlermeldung aussieht"
-  text: Description of current cell
-  title: Kekse
-- check: |
+    display: none
+    message: ''
+  text: "Aller Anfang ist leicht. Ist eine alte chinesische Weisheit.\n\nDer typische\
+    \ Anfang ist ein `Hello, World` Programm. Und wir k\xF6nnen gleich mal testen,\
+    \ ob alles so funktioniert wie es sollte. Oben rechts ist ein `Run`-Button. W\xFC\
+    rde ich ja mal drauf dr\xFCcken.\nDann sollte ein Fehler kommen. In der Fehlermeldung\
+    \ selbst sollte irgendwas darauf hinweisen, dass eine Klammer fehlt (naja, zumindest\
+    \ angedeutet). Die muss ganz hinten eingef\xFCgt werden, hinter dem rechten Anf\xFC\
+    hrungszeichen.\n\nUnd wenn jetzt nochmal der Code ausgef\xFChrt wird, dann sollte\
+    \ das Ergebnis orange werden. Das liegt daran, dass f\xFCr ein Weiterkommen `Hello,\
+    \ World!` ausgegeben werden. (Ausrufezeichen hinter das d *zwinker zwinker*)"
+  title: Start
+- check: |-
     def _Check(scope, output):
       if 'message' in scope.keys() and 'Hallo' in output:
         return True, 'Ganz sicher.'
       else:
         return False, 'Versuch es doch einfach nochmal.'
-  code: |
+  code: |-
     # Diese Zeile beschreibt nur etwas (und das nicht sehr gut...)
     # message = 'Hallo'
     # print(message)  # Hier wird wieder etwas ausgegeben
@@ -37,15 +40,15 @@ cells:
     \ Zeile auskommentiert und wird ignoriert.\n\nMache aus den richtigen Zeilen wieder\
     \ Code, der nicht als Kommentar interpretiert wird,\nindem die \xB4#\xB4 an den\
     \ richtigen Stellen entfernt werden\n(und dann auch die Leerzeichen direkt dahinter;\
-    \ Stichwort ganz links anfangen).\n"
+    \ Stichwort ganz links anfangen)."
   title: Kommentare
-- check: |
+- check: |-
     def _Check(scope, output):
       if 'mitesser' in scope.keys() and scope['mitesser'] == 5:
         return True, 'Locker flockig.'
       else:
         return False, 'Nicht so wirklich...'
-  code: |
+  code: |-
     lieblings_restaurant = 'Burger Donalds'  # Name vom Restaurant
     burger_donalds = RestaurantBesuch(lieblings_restaurant)
     burger_donalds.gericht(10)  # Kosten vom ersten Gericht (10)
@@ -80,23 +83,75 @@ cells:
     ')\n```\n\nInsgesamt ist es wohl sehr hilfreich mal an den einzelnen Werten (unter\
     \ dem `---` Kommentar) herumzuspielen.\nAlso den Name vom Restaurant mal \xE4\
     ndern, oder die Preise der einzelnen Gerichte.\nUm hier weiterzukommen, m\xFC\
-    ssen 5 Leute mitessen.\n"
+    ssen 5 Leute mitessen."
   title: Motivation
-- check: " \ndef _Check(scope, output):\n    if \"\" in output:\n        return True,\
-    \ 'Wundervoll.'\n    elif 'Traceback' in output:\n        return False, 'Exception'\n\
-    \    else:\n        return False, 'Und so sieht es aus, wenn es noch nicht ganz\
-    \ richtig ist.'"
-  code: |2-
-
-    # Python Code
-    print('Hello')
+- check: "def _Check(scope, output):\n    if 'anzahl_pizzen' in scope.keys() and scope['anzahl_pizzen']\
+    \ == 2:\n        return True, 'Wundervoll.'\n    elif 'Traceback' in output:\n\
+    \        return False, 'Ich w\xFCrde ja eine Zahl hinter das Gleichzeichen schreiben'\n\
+    \    elif 'anzahl_pizzen' in scope.keys():\n        return False, 'Jetzt muss\
+    \ die Anzahl der Pizzen nur noch gleich zwei sein.'\n    else:\n        return\
+    \ False, 'Fast.'"
+  code: "anzahl_pizzen = \nprint(anzahl_pizzen)"
   id: 3
   output: ''
   response:
     display: none
     message: ''
-  text: Description of current cell
-  title: Kekse
+  text: "Also das war ja total aufregend, aber was machte der ganze Quatsch da eigentlich?\n\
+    \nSehr gute Frage. EIne aufmerksame Leserschat ist immer wichtig.\n\nWeil wir\
+    \ nat\xFCrlich nicht \xFCbertreiben wollten machen wir Bibischritte. Wir suchen\
+    \ uns kleine Dinge mit denen wir dann sp\xE4ter den Restaurantrechner zusammenbauen\
+    \ k\xF6nnen. Und weil das ganze Programmierprinzip auf dem Zusammenbauen aus kleinen\
+    \ Teilen basiert, kann man danach auch fast schon eine Webseite bauen. Oder Twitter.\
+    \ Fast zumindest.\n\n#### Variablen\n\nEine Variable hei\xDFt Variable, weil sie\
+    \ variabel ist. Klever, oder? Also ist das was, was sich ver\xE4ndern l\xE4sst.\
+    \ Die Dinger sind so immer \xFCberall und verfolgen einen. Aber am meisten helfen\
+    \ da Beispiele. Wir fangen einfach mal an mit einer Zahl. \n\nWir wollten eine\
+    \ Variable haben die die Anzahl an Pizzen speichert, die wir heute noch essen\
+    \ wollen. Da wir bescheiden sind reichen uns `2`. Und damit wir das dann auch\
+    \ in der Ausgabe sehen wir das gleich danach ausgegeben."
+  title: Bibischritte
+- check: "def _Check(scope, output):\n    if 'kekse' in scope.keys() and scope['kekse']\
+    \ == 7:\n        return True, 'Wirklich aufregend.'\n    elif 'Traceback' in output:\n\
+    \        return False, 'Ich w\xFCrde ja eine Zahl hinter das Gleichzeichen schreiben'\n\
+    \    else:\n        return False, 'Noch nicht ganz.'"
+  code: "kekse = 5\nprint(kekse)\nkekse = \nprint(kekse)"
+  id: 4
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Aber jetzt k\xF6nnen wir damit ja noch ein bisschen Spa\xDF haben. Der Clou\
+    \ ist n\xE4mlich, dass wir die Variable mit der Zeit ver\xE4ndern k\xF6nnen.\n\
+    Nehmen wir also mal eine andere und geben sie danach aus. Und dann ver\xE4ndern\
+    \ wir sie.\n\nWas passiert jetzt also, wenn wir unten `kekse` auf `7` setzen?\
+    \ Was geben wir dann wohl aus?"
+  title: Bibischritte 2
+- check: "def _Check(scope, output):\n    if 'nachricht' in scope.keys() and scope['nachricht']\
+    \ == 'Moin':\n        return True, 'Locker flockig.'\n    elif 'Traceback' in\
+    \ output:\n        return False, 'Ich w\xFCrde ja eine Zahl hinter das Gleichzeichen\
+    \ schreiben'\n    elif 'Hallo' in output:\n        return False, 'Na. Es muss\
+    \ ja Moin ausgeben.'\n    elif 'message' in scope.keys():\n        return False,\
+    \ 'Die Variable sollte wohl nachricht hei\xDFen.'\n    else:\n        return False,\
+    \ 'Noch nicht ganz.'"
+  code: |-
+    message = 'Huhu'
+    print(message)
+  id: 5
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Naja und das ist das Grundprinzip. Aber es gibt nat\xFCrlich auch noch andere\
+    \ Typen. Bisher hatten wir ja nur ganze Zahlen (Integer oder int; je nachdem).\
+    \ Aber was macht Twitter blo\xDF? Da ist ja alles voller Text. Gute Frage.\n\n\
+    Naja. Es gibt zum Gl\xFCck auch Textwerte (Strings oder str). Die sind innerhalb\
+    \ von Anf\xFChrungsstrichen. Also ist bei `print('Hallo')` `'Hallo'` ein String.\
+    \ Und damit wir den abspeichern k\xF6nnen, schreiben wir ihn hinter einen Variablennamen\
+    \ wie vorher.\n\nUm es jetzt aber etwas aufregender zu machen, muss selbst eine\
+    \ Variable geschrieben werden. Es wird gesucht: Eine Variable mit dem Namen `nachricht`\
+    \ und sie muss den Inhalt `Moin` ausgeben."
+  title: Mehr Bibischritte
 global-code: '# Hier kommen globale Funktionen rein'
 passed: 0
 title: Starterpack
