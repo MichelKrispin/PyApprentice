@@ -1,41 +1,31 @@
 cells:
-- check: "def check(scope, output):\n  return 'Hello, World!' in output\n"
-  code: 'print(''Hello, World!'')
-
-    '
+- check: |-
+    def _Check(scope, output):
+      if 'a' in scope.keys():
+        if scope['a'] == 5:
+          return True, 'Easy, right?'
+        else:
+          return False, 'a exists, but it does not equal 5.'
+      elif 'Traceback' in output:
+        return False, 'This is how an exception looks like.'
+      else:
+        return False, 'There is not even the variable a.'
+  code: b = 4
   id: 0
-  output: Hello, World!<br>
+  output: ''
   response:
-    display: success
-    message: 'Well done.'
-  text: '## This is the markdown area.
+    display: warning
+    message: There is not even the variable a.
+  text: |-
+    ## This is the next chapter.
 
+    Maybe a small description or explanation.
 
-    Everything that markdown supports is possible, like `a = 10 if 10.0 == b else
-    True`.
-
-
-    Or maybe a list such as:
-
-    1. First you need to do this
-
-    2. And then that
-
-
-    ### Tables are also okay
-
-
-    | Left   | Center  | Right |
-
-    | ------ |:-------:| -----:|
-
-    | 2      | hot     |  Yes  |
-
-    | 1      | cold    |   No  |
-
-    '
-  title: Hello World
-- check: "def check(scope, output):\n  return 'a' in scope.keys()\n"
+    And then, try to set `a` to `5`. But first test what happens if the code raises an exception or if its not `5`. Or if there is no `a` at all.
+  title: Next Exercise
+- check: |
+    def _Check(scope, output):
+      return 'a' in scope.keys()
   code: 'a =
 
     '
@@ -44,29 +34,28 @@ cells:
   response:
     display: none
     message: ''
-  text: 'Yes.
-
+  text: |
+    Yes.
     Do something
-
-    '
   title: Ex 2
-- check: "def check(scope, output):\n  return 'True' in output\n"
-  code: 'a = 0
-
+- check: |
+    def _Check(scope, output):
+      return 'True' in output
+  code: |
+    a = 0
     print(b == )
-
-    '
   id: 2
   output: ''
   response:
     display: none
     message: ''
-  text: 'You should really do something.
-
+  text: |
+    You should really do something.
     Or not.
-
-    '
   title: Ex 3
-global-code: "# Write global code here\ndef something():\n    print('Hello World')"
+global-code: |-
+  # Write global code here
+  def something():
+      print('Hello World')
 passed: 1
 title: Demo

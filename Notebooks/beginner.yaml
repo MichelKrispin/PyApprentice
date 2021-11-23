@@ -1,14 +1,12 @@
 cells:
-- check: |-
-    def check(scope, output):
-      if 'message' in scope.keys() and 'Hallo' in output:
-        return True, 'Ganz sicher.'
-      else:
-        return False, 'Versuch es doch einfach nochmal.'
-  code: |-
-    # Diese Zeile beschreibt nur etwas (und das nicht sehr gut...)
-    # message = 'Hallo'
-    # print(message)  # Hier wird wieder etwas ausgegeben
+- check: " \ndef _Check(scope, output):\n    if \"\" in output:\n        return True,\
+    \ 'Wundervoll.'\n    elif 'Traceback' in output:\n        return False, 'Exception'\n\
+    \    else:\n        return False, 'Und so sieht es aus, wenn es noch nicht ganz\
+    \ richtig ist.'"
+  code: |2-
+
+    # Python Code
+    print('Hello')
   id: 0
   output: 'Traceback (most recent call last):<br>&nbsp;&nbsp;File &quot;Hello World&quot;,
     line 2<br>&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;^<br>SyntaxError:
@@ -16,16 +14,10 @@ cells:
   response:
     display: danger
     message: "Naja. Wenigstens wei\xDFt Du jetzt wie eine Fehlermeldung aussieht"
-  text: "Wir fangen mal klein an.\nCode wird immer Zeile f\xFCr Zeile geschrieben\
-    \ und in Python muss\njede Zeile korrekt einger\xFCckt werden (also im MOment\
-    \ noch ganz links anfangen)\nWenn vor einer Zeile ein `#` steht, dann ist diese\
-    \ Zeile auskommentiert und wird ignoriert.\n\nMache aus den richtigen Zeilen wieder\
-    \ Code, der nicht als Kommentar interpretiert wird,\nindem die \xB4#\xB4 an den\
-    \ richtigen Stellen entfernt werden\n(und dann auch die Leerzeichen direkt dahinter;\
-    \ Stichwort ganz links anfangen)."
-  title: Kommentare
+  text: Description of current cell
+  title: Kekse
 - check: |
-    def check(scope, output):
+    def _Check(scope, output):
       if 'message' in scope.keys() and 'Hallo' in output:
         return True, 'Ganz sicher.'
       else:
@@ -48,7 +40,7 @@ cells:
     \ Stichwort ganz links anfangen).\n"
   title: Kommentare
 - check: |
-    def check(scope, output):
+    def _Check(scope, output):
       if 'mitesser' in scope.keys() and scope['mitesser'] == 5:
         return True, 'Locker flockig.'
       else:
@@ -90,7 +82,7 @@ cells:
     ndern, oder die Preise der einzelnen Gerichte.\nUm hier weiterzukommen, m\xFC\
     ssen 5 Leute mitessen.\n"
   title: Motivation
-- check: " \ndef check(scope, output):\n    if \"\" in output:\n        return True,\
+- check: " \ndef _Check(scope, output):\n    if \"\" in output:\n        return True,\
     \ 'Wundervoll.'\n    elif 'Traceback' in output:\n        return False, 'Exception'\n\
     \    else:\n        return False, 'Und so sieht es aus, wenn es noch nicht ganz\
     \ richtig ist.'"

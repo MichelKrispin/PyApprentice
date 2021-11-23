@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import sys
 import yaml
 import PySimpleGUI as sg
 
@@ -66,16 +67,26 @@ def update_display(d, w, cell_id):
     if not cell:
         print(f'{i} does not exist. Highest is {get_highest_id(d)}')
         return
-    w['max-id'].update(f'Max ID: {get_highest_id(data)}')
+    w['max-id'].update(f'Max ID: {get_highest_id(d)}')
     w['code'].update(cell['code'])
     w['text'].update(cell['text'])
     w['check'].update(cell['check'])
     w['title'].update(cell['title'])
 
+def redo(event, text):
+    try:
+        text.edit_redo()
+    except:
+        pass
 
-if __name__ == '__main__':
-    file = './Notebooks/beginner.yaml'
-    data = load_data(file)
+def main(file_name):
+    # data = None
+    try:
+        # file = './Notebooks/beginner.yaml'
+        data = load_data(file_name)
+    except FileNotFoundError:
+        print(f'{file_name} does not exist.')
+        return
 
     sg.theme('DarkTeal11')
     layout = [[sg.Text(f'Max ID: {get_highest_id(data)}', key='max-id'),
@@ -103,6 +114,12 @@ if __name__ == '__main__':
 
     # Create the Window
     window = sg.Window('PyApprentice Editor', layout, font=('Courier', 14), element_justification='c').Finalize()
+    # Make undo/redo work
+    for k in ['text', 'code', 'check']:
+        t = window[k].Widget
+        t.configure(undo=True)
+        t.bind('<Control-Shift-Key-Z>', lambda e, text=t: redo(e, text))
+
     update_display(data, window, 0)
 
     # Event loop
@@ -110,12 +127,12 @@ if __name__ == '__main__':
     while True:
         event, values = window.read()
         if event == sg.WIN_CLOSED or event == 'Quit':
-            save_data(data, values, file, close=True)
+            save_data(data, values, file_name, last_id, close=True)
             break
         if event == 'Save':
-            save_data(data, values, file, last_id)
+            save_data(data, values, file_name, last_id)
         elif event == 'Update ID':
-            save_data(data, values, file, last_id)
+            save_data(data, values, file_name, last_id)
             try:
                 i = int(values['id'])
             except ValueError:
@@ -126,17 +143,17 @@ if __name__ == '__main__':
             i = get_highest_id(data)
             data['cells'].append({
                 'check': """ 
-def check(scope, output):
-    if "" in output:
-        return True, 'Wundervoll.'
-    elif 'Traceback' in output:
-        return False, 'Exception'
-    else:
-        return False, 'Und so sieht es aus, wenn es noch nicht ganz richtig ist.'""",
+    def _Check(scope, output):
+        if "" in output:
+            return True, 'Wundervoll.'
+        elif 'Traceback' in output:
+            return False, 'Exception'
+        else:
+            return False, 'Und so sieht es aus, wenn es noch nicht ganz richtig ist.'""",
                 'code': """
-# Python Code
-print('Hello')
-                """,
+    # Python Code
+    print('Hello')
+                    """,
                 'id': i + 1,
                 'output': '',
                 'response': {
@@ -151,3 +168,11 @@ print('Hello')
             update_display(data, window, last_id)
 
     window.close()
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Please specify the file to edit as the first argument.\n'
+              'That means: "./editor.py ./Notebooks/file.yaml"')
+    else:
+        main(sys.argv[1])

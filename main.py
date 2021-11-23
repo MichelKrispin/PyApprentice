@@ -27,6 +27,9 @@ yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
 class CellHandler:
     def __init__(self, file_name):
         self.file_name = file_name  # 'Notebooks/beginner_.yaml'
+        # Make a copy of the original file, if there is none
+        if not os.path.isfile(self.file_name + '.original'):
+            copyfile(self.file_name, self.file_name + '.original')
         with open(self.file_name, 'r') as f:
             self.data = yaml.safe_load(f)
 
@@ -70,21 +73,20 @@ class CellHandler:
                     exec(global_code, scope)
                 except Exception as e:
                     exception = traceback.format_exc()
-                    # Remove the traceback for this file
+                    # Remove the traceback for the global code
                     lines = exception.split('\n')
-                    exercise_name = cell['title']
                     output = '\n'.join([lines[0]] + lines[3:]) \
-                        .replace('<astring>', 'Global Code')
+                        .replace('<string>', 'Global Code')
             caught_exception = output != ''
             output = output if caught_exception else f.getvalue()
 
             # If everything went right do a little bit of reflection magic
             # such that every function created in the global functions scope
-            # knows that.
+            # knows where it comes from.
             for attr in scope:
                 try:
                     if scope[attr].__code__.co_filename == '<string>':
-                        scope[attr].__code__ = scope[attr].__code__.replace(co_filename='global_functions.py')
+                        scope[attr].__code__ = scope[attr].__code__.replace(co_filename='Global Code')
                 except AttributeError:
                     pass
         # Run the code sent by the user in the same scope
@@ -106,14 +108,13 @@ class CellHandler:
 
             # Find the checking function
             check_code = cell['check']
-            check_code += '\nresult = check(_Scope, _Output)'
+            check_code += '\nresult = _Check(_Scope, _Output)'
 
             check_scope = {'__name__': '__main__',
                            '__builtins__': globals()['__builtins__'],
                            '_Scope': scope, '_Output': output}
 
             # Run the checking function in the created scope
-            print(check_code)
             f = StringIO()
             with redirect_stdout(f):
                 exec(check_code, check_scope)
