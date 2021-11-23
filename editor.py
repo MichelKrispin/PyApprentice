@@ -73,14 +73,15 @@ def update_display(d, w, cell_id):
     w['check'].update(cell['check'])
     w['title'].update(cell['title'])
 
+
 def redo(event, text):
     try:
         text.edit_redo()
     except:
         pass
 
+
 def main(file_name):
-    # data = None
     try:
         # file = './Notebooks/beginner.yaml'
         data = load_data(file_name)
@@ -127,6 +128,12 @@ def main(file_name):
     while True:
         event, values = window.read()
         if event == sg.WIN_CLOSED or event == 'Quit':
+            values = {
+                'code': window['code'].DefaultText,
+                'title': window['title'].DefaultText,
+                'text': window['text'].DefaultText,
+                'check': window['check'].DefaultText,
+            }
             save_data(data, values, file_name, last_id, close=True)
             break
         if event == 'Save':
@@ -142,16 +149,14 @@ def main(file_name):
         elif event == 'Add Field':
             i = get_highest_id(data)
             data['cells'].append({
-                'check': """ 
-    def _Check(scope, output):
+                'check': """def _Check(scope, output):
         if "" in output:
             return True, 'Wundervoll.'
         elif 'Traceback' in output:
             return False, 'Exception'
         else:
             return False, 'Und so sieht es aus, wenn es noch nicht ganz richtig ist.'""",
-                'code': """
-    # Python Code
+                'code': """# Python Code
     print('Hello')
                     """,
                 'id': i + 1,
