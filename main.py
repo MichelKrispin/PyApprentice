@@ -4,6 +4,7 @@ import json
 import os
 import re
 import unicodedata
+import webbrowser
 
 import traceback
 import tornado.ioloop
@@ -164,7 +165,7 @@ class RunWebSocket(tornado.websocket.WebSocketHandler):
 
     def on_close(self):
         self.cell_handler.save(close=True)
-        print("WebSocket closed and file saved")
+        print(f'{self.cell_handler.file_name} closed and saved.')
 
 
 def search_for_notebooks(notebooks):
@@ -187,7 +188,6 @@ class HomeHandler(tornado.web.RequestHandler):
             }
             file_information.append(notebook)
 
-        print(file_information)
         self.render("static/index.html", notebooks=file_information)
 
 
@@ -230,5 +230,5 @@ def make_app():
 if __name__ == "__main__":
     app = make_app()
     app.listen(8000)
-    print(f'Running PyApprentrice on http://localhost:8000/\n')
+    webbrowser.open('http://localhost:8000/')
     tornado.ioloop.IOLoop.current().start()
