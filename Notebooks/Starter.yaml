@@ -152,6 +152,95 @@ cells:
     \ Variable geschrieben werden. Es wird gesucht: Eine Variable mit dem Namen `nachricht`\
     \ und sie muss den Inhalt `Moin` ausgeben."
   title: Mehr Bibischritte
+- check: "def _Check(scope, output):\n    if 'pizza' in scope.keys() and 'gemuese'\
+    \ in scope.keys() and 'gesamt' in scope.keys():\n      if (scope['pizza'] == 5.99\
+    \ and scope['gemuese'] == 1.99 and\n          scope['pizza'] + scope['gemuese]\
+    \ == scope['gesamt']:\n        return True, 'Daf\xFCr kannst Du Dir jetzt aber\
+    \ auch mal auf die Schulter klopfen.'\n    elif 'Traceback' in output:\n     \
+    \   return False, 'Da scheint irgendwas kaputt gegangen zu sein.'\n    elif 'p'\
+    \ in scope.keys() or 'g' in scope.keys() or 'o' in scope.keys():\n        return\
+    \ False, 'So wie es aussieht haben die Variablen noch nicht die richtigen Namen.'\
+    \ \n    else:\n        return False, 'Und so sieht es aus, wenn es noch nicht\
+    \ ganz richtig ist.'"
+  code: "p = \ng = \no = p + g"
+  id: 6
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Und daneben gibt es auch Kommazahlen. Schlie\xDFlich besteht die Welt nicht\
+    \ nur aus ganzen Zahlen und Text. Wenn wir 5 Euro durch drei teilen, muss jeder\
+    \ schlie\xDFlich 2,50 zahlen.\n\nDie Dinger hei\xDFen Float oder floating point\
+    \ number, denn das Komma \"fliegt\". Mehr oder weniger... Das liegt eben daran,\
+    \ dass z.B. bei der Zahl 2,5 das Komma an der zweiten Stelle steht, w\xE4hrend\
+    \ es bei 22,5 an der dritten Stelle steht. Das Komma kann sich frei bewegen. Aber\
+    \ das ist eher Nebensache.\n\nEins noch: Im Englischen wird \"zwei komma f\xFC\
+    nf\" zu \"two point five\". Deshalb wird eine Kommazahl mit einem Punkt dazwischen\
+    \ geschrieben und nicht mit einem Komma.\n\nAlso brauchen wir dieses Mal:\n- eine\
+    \ Variable `pizza` mit dem Wert `5.99`\n- eine Variable `gemuese` mit dem Wert\
+    \ `1.99` (ich w\xFCrde keine Sonderzeichen in die Variablen schreiben. Im Englischen\
+    \ sind die meist nicht so gut darin an andere Sprachen zu denken...)\n- eine Variable\
+    \ `gesamt` mit dem Wert `pizza + gemuese` (niemand rechnet selbst, wenn ein Computer\
+    \ zur Stelle ist)."
+  title: Float
+- check: |-
+    def _Check(scope, output):
+        if ('cool' in scope.keys() and 'uncool' in scope.keys() and
+            scope['cool'] == True and scope['uncool'] == False):
+            return True, 'Und das sind Variablen mit dem Typ bool.'
+        elif 'Traceback' in output:
+            return False, 'Oh oh. Was ist denn hier kaputt gegangen?'
+        else:
+            return False, 'Und so sieht es wieder aus, wenn es noch nicht ganz richtig ist.'
+  code: print('Bitte ersetze mich')
+  id: 7
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Jetzt gibt es noch einen aufregenden Grundtyp, den wir uns noch anschauen\
+    \ m\xFCssen. Das Ding hei\xDFt Bool(nach einem englischen Mathematiker Boole;\
+    \ das e wurde irgendwann unterschlagen...).\nEin Bool kann nur zwei Werte annehmen:\
+    \ Wahr oder Falsch. Nichts anderes.\nKlingt erstmal nicht aufregend, kann es auch\
+    \ sein, muss es aber nicht.\n\nAlso bauen wir uns erstmal zwei davon:\n`cool`\
+    \ mit dem Wert `True` (achte auf Gro\xDFschreibung), und `uncool` mit dem Wert\
+    \ `False`."
+  title: Wahr oder Falsch
+- check: "def _Check(scope, output):\n    if ('False' in output and all([e in scope.keys()\
+    \ for e in 'abc']) and\n        (scope['a'] == scope['b'] == scope['c']) == False):\n\
+    \        return True, 'Upsi pupsi war wohl zu einfach dupsi.'\n    elif 'Traceback'\
+    \ in output:\n        return False, 'Oh oh. Kapuff.'\n    else:\n        return\
+    \ False, 'An der L\xF6sung w\xFCrde ich nochmal feilschen.'"
+  code: "a = \nb = \nc = \nprint(a == b)"
+  id: 8
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Bisher haben wir immer nur Sachen gemacht die auf jeden Fall passieren. Ist\
+    \ ja eigentlich nicht so aufregend. Man startet das Programm und es f\xFChrt immer\
+    \ alles aus. Noch nicht so spannend. Aber fangen wir mal an den Teil von eben\
+    \ zu nutzen. Warum brauchen wir Werte die Wahr oder Falsch sein k\xF6nnen? Aufmerksame\
+    \ Leserschaft. Immer wichtig!\n\nDamit wir den Programmfluss \xE4ndern k\xF6nnen.\
+    \ Stellen wir uns ein Twitter vor, in dem alle, die ein 'schwabbel' im Usernamen\
+    \ haben, geblockt werden. Um das aufzubauen, m\xFCssen wir Dinge vergleichen k\xF6\
+    nnen. Hier konkret so etwas wie: _\"Hat user x 'schwabbel' im Namen\"_.\n\nWir\
+    \ fangen nat\xFCrlich wieder klein an. Nehmen wir uns wieder zwei boolsche Variablen\
+    \ wie eben und vergleichen sie.\nEs gibt mehrere Vergleiche:\n- `==` ist gleich?\
+    \ (zwei Gleichheitszeichen, weil eins ja f\xFCr das Zuweisen ist; `a = 5`)\n--\
+    \ `5 == 5` ergibt `True`\n-- `5 == 4` ergibt `False`\n-- `False == True` ergibt\
+    \ `False`\n- `!=` ist ungleich?\n-- `5 != 5` eribt `False` (also das genaue Gegenteil\
+    \ von `==` eben...)\n- `>`  ist links gr\xF6\xDFer als rechts?\n-- `5 > 5` ergibt\
+    \ `False` (gr\xF6\xDFer *als*)\n-- `5 > 4` ergibt `True`\n- `>=` ist links gr\xF6\
+    \xDFer gleich rechts?\n-- `5 > 5` ergibt `True` (gr\xF6\xDFer *gleich*)\n- `<`\
+    \  ist links kleiner als rechts?\n-- `5 < 6` ergibt `True`\n- `<=` ist links kleiner\
+    \ gleich rechts?\n-- Naja... Du wei\xDFt schon.\n\nEs hilft hier wieder einfach\
+    \ mal herumzuspielen an den Werten und die Ausgaben zu \xFCberpr\xFCfen.\nUm weiterzukommen\
+    \ suchen wir drei Variablen `a`, `b`, `c` (kreativ, nicht?) mit den jeweiligen\
+    \ Werten `True`, `False`, `False` und ausgegeben werden muss was bei dem Vergleich\
+    \ `a == b == c` herauskommt. Wir k\xF6nnen n\xE4mlich auch Vergleiche hintereinander\
+    \ schachteln. Am wichtigsten wohl f\xFCr sowas wie `5 < etwas < 10`."
+  title: Wahr oder Wahr
 global-code: '# Hier kommen globale Funktionen rein'
 passed: 0
 title: Starterpack
