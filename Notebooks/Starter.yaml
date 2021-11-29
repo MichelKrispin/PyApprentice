@@ -49,14 +49,14 @@ cells:
       else:
         return False, 'Nicht so wirklich...'
   code: |-
-    lieblings_restaurant = 'Burger Donalds'  # Name vom Restaurant
-    burger_donalds = RestaurantBesuch(lieblings_restaurant)
-    burger_donalds.gericht(10)  # Kosten vom ersten Gericht (10)
-    burger_donalds.gericht(15)  # Kosten vom zweiten
-    burger_donalds.gericht(8)   # Kosten vom dritte)n
+    gericht = []
+    gericht.append(10)  # Kosten vom ersten Gericht (10)
+    gericht.append(15)  # Kosten vom zweiten
+    gericht.append(8)   # Kosten vom dritten
 
     mitesser = 4  # Anzahl der Mitessenden
-    gesamt_kosten(mitesser)  # Gib die Gesamtkosten aus
+    kosten = gesamt_kosten(gerichte, mitesser)  # Berechne die Gesamtkosten aus
+    print(kosten)  # Gebe die Kosten aus
   id: 2
   output: ''
   response:
@@ -71,19 +71,12 @@ cells:
     \ Beispiel etwas... 'konstruiert' ist.\nEs wird sp\xE4ter noch aufregender, aber\
     \ hier sehen wir schonmal alle wichtigen Teile.)\n\nDaf\xFCr kopier den folgenden\
     \ Code in das rechte 'Global Functions' Fenster (und \xFCberschreib alles andere\
-    \ darin).\n```py\nclass RestaurantBesuch:\n    def __init__(self, restaurant_name,\
-    \ max_besucher=15):\n        self.restaurant_name = restaurant_name\n        self.max_besucher\
-    \ = max_besucher\n        self.kosten = 0.0\n\n    def gericht(self, kosten):\n\
-    \        self.kosten += kosten\n\n    def gesamt_kosten(self, anzahl_besucher):\n\
-    \        if anzahl_besucher > self.max_besucher:\n            raise Exception('So\
-    \ viele Leute sind nicht gut f\xFCr die Geldb\xF6rse')\n        return self.kosten\
-    \ / anzahl_besucher\n\ndef gesamt_kosten(restaurant_besuch, anzahl_besucher):\n\
-    \    print(f'Die Gesamtkosten im {restaurant_besuch.restaurant_name} '\n     \
-    \     f'betragen {restaurant_besuch.gesamt_kosten(anzahl_besucher):.2f}\u20AC\
-    ')\n```\n\nInsgesamt ist es wohl sehr hilfreich mal an den einzelnen Werten (unter\
-    \ dem `---` Kommentar) herumzuspielen.\nAlso den Name vom Restaurant mal \xE4\
-    ndern, oder die Preise der einzelnen Gerichte.\nUm hier weiterzukommen, m\xFC\
-    ssen 5 Leute mitessen."
+    \ darin).\n```\ndef gesamt_kosten(self, gerichte, anzahl):\n    betrag = 0.0\n\
+    \    for kosten in gerichte:\n        betrag += kosten\n    if betrag <= 0.0:\n\
+    \        return 0.0\n    return betrag / anzahl\n```\n\nInsgesamt ist es wohl\
+    \ sehr hilfreich mal an den einzelnen Werten (unter dem `---` Kommentar) herumzuspielen.\n\
+    Also den Name vom Restaurant mal \xE4ndern, oder die Preise der einzelnen Gerichte.\n\
+    Um hier weiterzukommen, m\xFCssen 5 Leute mitessen."
   title: Motivation
 - check: "def _Check(scope, output):\n    if 'anzahl_pizzen' in scope.keys() and scope['anzahl_pizzen']\
     \ == 2:\n        return True, 'Wundervoll.'\n    elif 'Traceback' in output:\n\
@@ -241,6 +234,111 @@ cells:
     \ `a == b == c` herauskommt. Wir k\xF6nnen n\xE4mlich auch Vergleiche hintereinander\
     \ schachteln. Am wichtigsten wohl f\xFCr sowas wie `5 < etwas < 10`."
   title: Wahr oder Wahr
+- check: |-
+    def _Check(scope, output):
+        if ('age' in scope.keys() and 'maximum_age' in scope.keys() and
+            scope['age'] > scope['maximum_age']):
+            return True, 'Das ist eine freie Plattform.'
+        elif 'Traceback' in output:
+            return False, 'Diese Plattform ist zur Zeit nicht erreichbar.'
+        else:
+            return False, 'Armer Bert.'
+  code: |-
+    message = 'Das ist eine freie Plattform'
+
+    user = 'Bert'
+    age = 31
+
+    maximum_age = 30
+
+    if age > maximum_age:
+      print('-- Diese Nachricht wurde blockiert. --')
+    else:
+      print(message)
+  id: 9
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Jetzt haben wir Vergleiche. Wir sind sooooo kurz davor etwas wirklich gro\xDF\
+    artiges zu schaffen.\n\nWir k\xF6nnen jetzt n\xE4mlich... *Trommelwirbel*\n\n\
+    Bedingungen einf\xFChren. Stellen wir uns vor, wir haben eine sehr restriktive\
+    \ Social Media Plattform. Nicht so \"jeder darf alles schreiben\", sondern alle,\
+    \ die \xE4lter als 30 sind werden zensiert. Unser Programm, unsere Regeln. Ist\
+    \ ja klar.\n\nAlso:\nWir haben jetzt zwei M\xF6glichkeiten, um die Nachricht von\
+    \ Bert anzuzeigen. Entweder er schummelt mit seinem wahren Alter (er sieht eh\
+    \ aus wie 19), oder das Zensur-Alter wird angehoben. Freie Wahl. Denn das ist\
+    \ eine (fast) freie Plattform."
+  title: Rein hypothetisch
+- check: |-
+    def _Check(scope, output):
+        if ('age' in scope.keys() and scope['age'] < 20 and
+            'Jungspund.' in output):
+            return True, 'Jung geblieben...'
+        elif 'Traceback' in output:
+            return False, 'Diese Plattform ist zur Zeit nicht erreichbar.'
+        else:
+            return False, 'Schon alt...'
+  code: |-
+    message = ''  # Leere Nachricht; Platzhalter
+
+    age = 40
+
+    if age < 20:
+      message = 'Jungspund.'
+    elif age < 30:
+      message = 'Fast schon Oppa.'
+    else:
+      message = 'Rente steht an.'
+
+    print(message)
+  id: 10
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Jetzt k\xF6nnte es aber sein, dass wir den ganzen Spa\xDF noch etwas feiner\
+    \ unterteilen wollen.\n\nWir haben zum Beispiel eine freie Plattform, die alle\
+    \ Nutzer sofort in Schubladen steckt.\nWie gesagt: Unsere Plattform, unsere Regeln.\n\
+    \nWir kategorisieren also mit was w\xE4re wenn hintereinander. Das funktioniert\
+    \ mit `if` und `elif` danach f\xFCr \"else if\". Wenn das `if` nicht zutrifft,\
+    \ dann wird das `elif` \xFCberpr\xFCft. Der wichtige Unterschied hier ist: Wenn\
+    \ wir zwei `if` hintereinander stellen, werden beide auf jeden Fall \xFCberpr\xFC\
+    ft. Auch wenn das erste wahr ist. Bei `elif` nicht.\n\nKonkret ist hier also Beispiel\
+    \ A.\nDas Alter sollte so niedrig genug sein, damit der `'Jungspund.'` ausgegeben\
+    \ wird."
+  title: Hypothethisch Plus
+- check: |-
+    def _Check(scope, output):
+        if ('age' in scope.keys() and scope['age'] < 20 and
+            'Jungspund.' in output):
+            return True, 'Locker flockig.'
+        elif 'Traceback' in output:
+            return False, 'Diese Plattform ist zur Zeit nicht erreichbar.'
+        else:
+            return False, 'Noch nicht ganz.'
+  code: |-
+    message = ''  # Leere Nachricht; Platzhalter
+
+    age = 15
+
+    if age < 20:
+      message = 'Jungspund.'
+    if age < 30:  # Kein else if
+      message = 'Fast schon Oppa.'
+    if age >= 30:  # Separates else
+      message = 'Rente steht an.'
+
+    print(message)
+  id: 11
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Und jetzt mal ohne `elif`. Was passiert hier wohl, wenn das Alter wieder\
+    \ kleiner als 20 ist? \n\nWas muss denn hier ge\xE4ndert werden, damit wir wieder\
+    \ dieselbe Ausgabe wie vorher bekommen?"
+  title: If if if
 global-code: '# Hier kommen globale Funktionen rein'
 passed: 0
 title: Starterpack
