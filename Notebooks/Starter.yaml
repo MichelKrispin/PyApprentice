@@ -9,10 +9,10 @@ cells:
   response:
     display: none
     message: ''
-  text: "Aller Anfang ist leicht. Ist eine alte chinesische Weisheit.\n\nDer typische\
-    \ Anfang ist ein `Hello, World` Programm. Und wir k\xF6nnen gleich mal testen,\
-    \ ob alles so funktioniert wie es sollte. Oben rechts ist ein `Run`-Button. W\xFC\
-    rde ich ja mal drauf dr\xFCcken.\nDann sollte ein Fehler kommen. In der Fehlermeldung\
+  text: "Aller Anfang ist leicht. Wie eine alte Weisheit besagt.\n\nDer typische Anfang\
+    \ ist ein `Hello, World` Programm. Und wir k\xF6nnen gleich mal testen, ob alles\
+    \ so funktioniert wie es sollte. Oben rechts ist ein `Run`-Button. W\xFCrde ich\
+    \ ja mal drauf dr\xFCcken.\nDann sollte ein Fehler kommen. In der Fehlermeldung\
     \ selbst sollte irgendwas darauf hinweisen, dass eine Klammer fehlt (naja, zumindest\
     \ angedeutet). Die muss ganz hinten eingef\xFCgt werden, hinter dem rechten Anf\xFC\
     hrungszeichen.\n\nUnd wenn jetzt nochmal der Code ausgef\xFChrt wird, dann sollte\
@@ -339,6 +339,138 @@ cells:
     \ kleiner als 20 ist? \n\nWas muss denn hier ge\xE4ndert werden, damit wir wieder\
     \ dieselbe Ausgabe wie vorher bekommen?"
   title: If if if
+- check: |-
+    def _Check(scope, output):
+        if ('Nach Hause telefonieren' in output and 'max_messages' in scope.keys() and
+            'message' in scope.keys() and 'number_messages' in scope.keys() and
+            scope['number_messages'] < scope['max_messages'] and
+            scope['number_messages'] == 5 and
+            type(scope['number_messages'] == int):
+            return True, 'Mal eben so.'
+        elif 'Traceback' in output:
+            return False, 'Kaputt...'
+        else:
+            return False, 'Ja, ne. Ne.'
+  code: |-
+    max_messages = 6
+
+    # Hier fehlt wohl was
+
+    if _:
+      # Etwas
+  id: 12
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Was wissen wir eigentlich schon?\n\nDamit wir rekapitulieren, was schon alles\
+    \ programmiert werden kann, hier eine kleine Aufgabe.\n\nWir wollen haben:\n-\
+    \ Eine Variable namens `message` mit dem Inhalt der Nachricht \"Nach Hause telefonieren\"\
+    ,\n- eine Variable namens `number_messages` mit einer bisherigen Anzahl von f\xFC\
+    nf als Integer (int),\n- Die Ausgabe der Nachricht, wenn die Anzahl der bisherigen\
+    \ Nachricht kleiner als die maximale Anzahl der Nachrichten ist."
+  title: Kurze Wiederholung
+- check: |-
+    def _Check(scope, output):
+        if ('[1, 2, 3]' in output and 'zahlen' in scope.keys() and
+             scope['zahlen'] == [1,2,3]):
+            return True, 'Supiiiiiiii.'
+        elif 'Traceback' in output:
+            return False, 'Ne. Das sieht ja gar nicht gut aus...'
+        else:
+            return False, 'Ja. Aber auch nein. Eher nein.'
+  code: |-
+    zahlen = []
+    print(zahlen)
+  id: 13
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Jetzt sind normalerweise ja aber mehr als ein Nutzer unterwegs.\nOder mehr\
+    \ als eine Person geht in ein Restaurant.\nOder es werden verschiedene Gerichte\
+    \ gegessen, die unterschiedlich viel kosten.\n\nWir wollen aber nicht f\xFCr jeden\
+    \ einzelnen Wert eine neue Variable erstellen. Manchmal wissen wir am Anfang ja\
+    \ auch noch gar nicht, wie viele Werte wir am Ende haben. Daf\xFCr gibt es: *Listen*.\n\
+    Aufregend. In Python \xFCblicherweise `list`.\n\nEine Liste ist genau das was\
+    \ es sagt: Eine Liste von Werten. Aber, aber. Diese Liste selbst ist jetzt die\
+    \ Variable. Und diese Variable h\xE4lt keine, eine, oder mehrere Werte. Das k\xF6\
+    nnen sogar unterschiedliche Typen sein, aber das lassen wir lieber sein. Mir ist\
+    \ noch kein Fall untergekommen wo das praktisch sein soll. Aber irgendwo wird\
+    \ es da sicher etwas f\xFCr geben. Wir bleiben mal bei Listen von einem Typ.\n\
+    \nEine Liste sieht dann beispielsweise so aus:\n```\nkosten = [5, 3, 5, 7]\n```\n\
+    \nEs k\xF6nnen so viele Elemente wie wir wollen da rein - naja... zumindest bis\
+    \ der Speicher voll ist - und die Werte k\xF6nnen auch gleich sein. Wir k\xF6\
+    nnen zweimal eine 5 reinpacken.\n\nUm dann auf ein Element zuzugreifen benutzen\
+    \ wir wieder `[]`. Und zwar w\xE4re `kosten[0]` gleich `5`. Das ist das erste\
+    \ Element. Wir sehen: Wir fangen bei 0 an zu z\xE4hlen. Hat sich mal jemand so\
+    \ ausgedacht... Ist nicht bei allen Programmiersprachen so, aber grunds\xE4tzlich\
+    \ w\xFCrde ich davon ausgehen, weil die meisten schon bei 0 anfangen.\n\nDann\
+    \ k\xF6nnen wir durchgehen und die jeweiligen Elemente ansprechen. Also \n```\n\
+    kosten[0] # 5\nkosten[1] # 3\nkosten[2] # 5\nkosten[3] # 7\n```\n\nWenn wir versuchen\
+    \ auf das f\xFCnfte Element zuzugreifen mit `kosten[4]` dann findet Pythone das\
+    \ nicht lustig und gibt einen Fehler aus. Ist ja schlie\xDFlich nichts drin. Wenn\
+    \ wir manchmal aber einfach vergessen haben - das Alter und so - wie viele Elemente\
+    \ wir in der Liste haben, dann k\xF6nnen wir mit `kosten[-1]` auf das letzte Element,\
+    \ und mit `-4` wieder auf das erste Element zugreifen. Zumindest in Python (das\
+    \ geht in eher wenigen Programmiersprachen).\n\nUm eine leere Liste zu initialisieren\
+    \ und die Elemente schrittweise hinzuzuf\xFCgen schreiben wir einfach:\n```\n\
+    kosten = []\nkosten.append(5)\nkosten.append(3)\nkosten.append(5)\nkosten.append(7)\n\
+    ```\n\nIst mehr Schreibarbeit, aber auch flexibler, weil wir erst im sp\xE4teren\
+    \ Verlauf des Programms die Elemente hinzuf\xFCgen k\xF6nnen.\n\n### Praxis\n\
+    Viel Input... Also gehts jetzt mal ran, damit das ganze auch ein wenig h\xE4ngen\
+    \ bleibt.\n\nWir fangen mit einer einfach Liste an. Die Variable `zahlen` muss\
+    \ die Werte `1`, `2` und `3` beinhalten. In dieser Reihenfolge. Reihenfolge ist\
+    \ n\xE4mlich wichtig."
+  title: Listen
+- check: "def _Check(scope, output):\n    if 'schuhe' in scope.keys() and scope['schuhe']\
+    \ == [51, 46, 52, 53, 46, 37]:\n        return True, 'Die haben aber kleine F\xFC\
+    \xDFe.'\n    elif 'Traceback' in output:\n        return False, 'Puff.'\n    else:\n\
+    \        return False, 'So knapp. Vielleicht. Vielleicht aber auch nicht.'"
+  code: '# Hier koennte Dein Code stehen'
+  id: 14
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Und jetzt brauchen wir eine Liste mit dem Namen `schuhe` f\xFCr die Schuhgr\xF6\
+    \xDFen in einem durchschnittlichen Kindergarten.\nDiese haben die Werte:\n- 51\n\
+    - 46\n- 52\n- 53\n- 46\n- 37"
+  title: Liste 2
+- check: "def _Check(scope, output):\n    if ('user' in scope.keys() and \n      \
+    \  scope['user'] == ['Herbert', 'Gerda', 'Renate', 'Udo', 'Bodo']:\n        return\
+    \ True, 'So sieht ein Club der jungen Menschen aus.'\n    elif 'Traceback' in\
+    \ output:\n        return False, 'Oh oh. Da ist wohl viel schief gelaufen.'\n\
+    \    else:\n        return False, 'Oh oh. Da ist wohl etwas schief gelaufen.'"
+  code: '# Hier koennte Dein Code stehen'
+  id: 15
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Aber Listen k\xF6nnen nat\xFCrlich auch noch etwas anderes beinhalten als\
+    \ Zahlen. Zum Beispiel die Liste der \xB4user\xB4:\n- Herbert\n- Gerda\n- Renate\n\
+    - Udo\n- Bodo"
+  title: Liste 3
+- check: |-
+    def _Check(scope, output):
+        if 'numbers' in scope.keys() and '22' in output and scope['numbers'][4] == 22:
+            return True, 'Piu Piu.'
+        elif 'Traceback' in output:
+            return False, 'Puff.'
+        else:
+            return False, 'Naaaaaaa. Neeeee.'
+  code: |-
+    numbers = [8, 29, 37, 22, 19, 23, 12, 26, 40, 20]
+    print()
+  id: 16
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Und jetzt wollen wir das vierte Element der gegebenen Liste `numbers\xB4\
+    \ (kreativ, nicht?) ausgeben."
+  title: Liste 4
 global-code: '# Hier kommen globale Funktionen rein'
 passed: 0
 title: Starterpack
