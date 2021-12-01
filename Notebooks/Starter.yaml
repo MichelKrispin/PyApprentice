@@ -471,6 +471,262 @@ cells:
   text: "Und jetzt wollen wir das vierte Element der gegebenen Liste `numbers\xB4\
     \ (kreativ, nicht?) ausgeben."
   title: Liste 4
+- check: |-
+    def _Check(scope, output):
+        if '3\n2\n1\n' in output and numbers == [3, 2, 1]:
+            return True, 'Ganz genau so geht das.'
+        elif 'Traceback' in output:
+            return False, 'Nope. Das sieht gar nicht gut aus.'
+        else:
+            return False, 'Nope. Das ist es noch nicht.'
+  code: |-
+    numbers = []  # Sollte wohl was in der Liste sein
+    for number in numbers:  # number ist jetzt die jeweilige Zahl
+      print()  # Hier fehlt relativ wahrscheinlich auch noch was
+  id: 17
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Warum Listen auch noch aufregend sind? Weil wir Dinge dadurch f\xFCr jedes\
+    \ Element in einer Liste etwas Bestimmtes machen k\xF6nnen. Klingt jetzt erstmal\
+    \ kompliziert, ist aber eigentlich ganz simpel.\n\nDas Prinzip ist so:\n- Wir\
+    \ haben eine Liste.\n- Wir gehen durch die Liste durch.\n- Wir machen etwas mit\
+    \ dem Element der Liste.\n\nUnd das machen wir mit einem `for`-Loop. Das sieht\
+    \ typischerweise so aus:\n```\nfor e in [1, 2, 3]:\n  print(e)  # Oder mach was\
+    \ anderes...\n```\n\nWichtig ist hier wieder das richtige Einr\xFCcken. Und ab\
+    \ dann habne wir im ersten Loop, dass `e` gleich `1` ist und danach `2` und danach\
+    \ `3`. Eigentlich ganz \xFCbersichtlich.\n\nDamit das aber nicht so festgeschrieben\
+    \ ist benutzen wir wieder eine Liste `numbers`. Die gehen wir durch und geben\
+    \ die Elemente aus. Wir wollen f\xFCr den Anfang die Elemente `3`, `2`, `1` ausgeben,\
+    \ jeweils in einer Zeile und in der Reihenfolge."
+  title: Immer im Kreis
+- check: "def _Check(scope, output):\n    if ('True' in output and 'var' in scope.keys()\
+    \ and 'result' in scope.keys() and\n        scope['var'] == 1.5 and scope['var']\
+    \ == scope['result']):\n        return True, 'Pille Palle.'\n    elif 'Traceback'\
+    \ in output:\n        return False, 'Puff. Explosion.'\n    elif '1.5' in output:\n\
+    \        return False, 'Sehr gut. Legales schummeln. Technik, die begeistert.'\n\
+    \    else:\n        return False, 'N\xE4\xE4\xE4\xE4\xE4\xE4\xE4.'"
+  code: |-
+    var = 1.0
+    var += 2.0
+    var *= 3.0
+    var -= 4.5
+    var /= 3.0
+
+    result = 0.0  # Diesen Wert ersetzen
+
+    print(var == result)
+  id: 18
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Jetzt k\xF6nnen wir Sachen im Kreis machen und damit ja ein bisschen rumspielen.\n\
+    \nDamit wir etwas Aufregendes und h\xE4ufig Genutztes machen k\xF6nnen, hier ein\
+    \ kleines Zwischenspiel.\nWenn wir eine Variable haben, eine Zahl oder einen Text,\
+    \ dann k\xF6nnen wir den ver\xE4ndern.\nAlso wenn wir eine Zahl haben und diese\
+    \ Zahl um eins erh\xF6hen wollen, dann m\xFCssen wir ja so etwas machen:\n```\n\
+    i = 0\ni = i + 1\n``` \n\nDenn das `i` ist der Wert, den es vorher hatte und dazu\
+    \ noch eins drauf.\n\nDasselbe Prinzip funktioniert auch mit Text:\n```\ntext\
+    \ = 'Hallo'\ntext += 'lilo'\n```\n\nUnd danach ist die Variable `text` gleich\
+    \ `'Hallolilo'`. Und wie uns aufgefallen ist, ist `+=` eine Abk\xFCrzung f\xFC\
+    r `= variable + `. Bei Zahlen geht das ganze auch mit mal (`*=`), minus (`-=`)\
+    \ und geteilt (`/=`). Das macht aber bei Text nicht ganz so viel Sinn...\n\n####\
+    \ Was suchen wir?\n\nWas ist der Wert von `var` in der letzten Zeile. Nach dem\
+    \ Eintragen des richtigen Wertes sollte `True` ausgegeben werden. (Statt selbst\
+    \ zu rechnen, kann nat\xFCrlich vorher einmal nur der Wert von `var` ausgegebn\
+    \ werden. Nachvollziehen, warum es diesen Wert hat w\xE4re aber wohl nicht verkehrt.)"
+  title: Ganz nebenbei...
+- check: "def _Check(scope, output):\n    if ('True' in output and 'var' in scope.keys()\
+    \ and 'result' in scope.keys() and\n        scope['var'] == 'Wer mag Kekse?' and\
+    \ scope['var'] == scope['result']):\n        return True, 'Daf\xFCr kann man sich\
+    \ schon mal auf die Schulter klopfen.'\n    elif 'Traceback' in output:\n    \
+    \    return False, 'Puff. Putt.'\n    elif '1.5' in output:\n        return False,\
+    \ 'Sehr gut. Wenn schummeln blo\xDF immer so einfach w\xE4re...'\n    else:\n\
+    \        return False, 'Ja. Ach ne. Doch nicht. Ne.'"
+  code: |-
+    var = 'mag '
+    var = 'Wer' + ' ' + var
+    var += 'Kekse'
+    var += '?'
+
+    result = 'Blabla'  # Diesen Wert ersetzen
+
+    print(var == result)
+  id: 19
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: |-
+    Dasselbe wollen wir auch noch einmal mit einem Text testen.
+    Gleiches Prinzip wie zuvor.
+  title: Texte
+- check: "def _Check(scope, output):\n    if ('True' in output and 'numbers' in scope.keys()\
+    \ and\n        scope['numbers'] == [1, 1, 1, 2] and\n        'counter' in scope.keys()\
+    \ and 'result' in scope.keys() and\n        scope['counter'] == 7 and scope['counter']\
+    \ == scope['result']):\n        return True, 'Jop.'\n    elif 'Traceback' in output:\n\
+    \        return False, 'Piff Paff Puff. Putt.'\n    elif '1.5' in output:\n  \
+    \      return False, 'Sehr gut. Wenn schummeln blo\xDF immer so einfach w\xE4\
+    re...'\n    else:\n        return False, 'Ja. Ach ne. Doch nicht. Ne.'"
+  code: |-
+    numbers = [1, 1, 1, 2]
+    counter = 2
+    for number in numbers:
+      counter += number
+
+    result = 0
+    print(result == number)
+  id: 20
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Kommen wir also zur\xFCck zu den Kreisen.\nWelchen Wert hat der `counter`\
+    \ am Ende?"
+  title: Wieder Kreise
+- check: "def _Check(scope, output):\n    if ('True' in output and 'messages' in scope.keys()\
+    \ and\n        len(scope['messages']) == 4 and\n        scope['messages'][2] ==\
+    \ 'Moin Berta' and\n        'bertas_index' in scope.keys() and 'bertas_message'\
+    \ in scope.keys() and\n        scope['bertas_index'] == 2 and scope['bertas_message']\
+    \ == 'Moin Berta'):\n        return True, 'War das nicht... Einfach?'\n    elif\
+    \ 'Traceback' in output:\n        return False, 'Das mochte Python nun gar nicht\
+    \ leiden.'\n    else:\n        return False, 'N\xF6. Vielleicht nah dran. Vielleicht\
+    \ nicht. Wir werden es nie erfahren.'"
+  code: |-
+    user = ['Simone', 'Alf', 'Berta', 'Thorsten']
+    hello_message = 'Moin '
+
+    messages = []
+    for u in user:
+      messages.append(hello_message + u)
+
+    bertas_message = 'Hallo Alf'
+    bertas_index = 1
+    print(messages[i] == bertas_message)
+  id: 21
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Damit haben wir eigentlich genug, um beispielsweise bei einer automatisierten\
+    \ E-Mail ein wenig Pers\xF6nlichkeit vorzugaukeln.\n\nHier werden wir ein wenig\
+    \ komplexer.\n\nWas ist Bertas Nachricht am Ende und an welcher Stelle steht diese\
+    \ Nachricht?\nEs hilft Schritt f\xFCr Schritt durch den Code zu gehen, vielleicht\
+    \ sogar alles auf einen Zettel aufzuschreiben. Ein lockeres: Wenn das, dann hier\
+    \ so, deshalb das da und dann ist das hier drin, weshalb das so."
+  title: Ein wenig was vorgaukeln
+- check: |-
+    def _Check(scope, output):
+        if 'Moin Inge\nMoin Siegried' in output:
+            return True, 'Toller Start.'
+        elif 'Traceback' in output:
+            return False, 'Das sieht nicht gut aus.'
+        else:
+            return False, 'Das sieht mir etwas zu orange aus.'
+  code: |-
+    def say_hello(hello, users):
+      for u in users:
+        print(hello + u)
+
+    user = ['Otto', 'Judit']
+    say_hello('Huhu ', user)
+
+    say_hello('Servus ', ['Horst', 'Ute'])  # Zeile aendern
+  id: 22
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Im Prinzip war jetzt alles dabei, was mal in allen \xFCblichen Programmen\
+    \ so vorkommt. Aber eine wichtige Sache noch nicht. Und das sind Funktionen. Die\
+    \ m\xFCssen leider noch sein. Bisher m\xFCssten wir, wenn wir etwas Kompliziertes\
+    \ schreiben, wirklich alles untereinander schreiben. Auch, wenn wir leicht ver\xE4\
+    nderte Werte nutzen w\xFCrden.\n\nNehmen wir daf\xFCr folgendes (leicht konstruiertes)\
+    \ Beispiel.\n```\nuser = ['Otto', 'Judit']\nhello = 'Huhu '\nfor u in user:\n\
+    \  print(hello + u)\n\nhello = 'Moin '\nfor u in user:\n  print(hello + u)\n\n\
+    hello = 'Servus '\nfor u in user:\n  print(hello + u) \n```\n\nDas meiste davon\
+    \ sieht irgendwie so aus, als w\xFCrde es exakt dasselbe machen, aber andere Werte\
+    \ brauchen. Jetzt sind wir nat\xFCrlich faul. Ich tippe den ganzen Quatsch zumindest\
+    \ nicht nochmal ab, nur weil jemand anders begr\xFC\xDFt werden m\xF6chte.\n\n\
+    Daf\xFCr gibt es jetzt Funktionen. Die sehen immer so aus:\n```\ndef name(hier,\
+    \ dort, und):\n  print('huhu')  # Hier passiert etwas\n```\n\nund die k\xF6nnen\
+    \ dann aufgerufen mit `name(1, 2, 3)` aufgerufen werden.\n\n#### Praxis\nWir haben\
+    \ da aber mal etwas vorbereitet, sagte der Koch in der Show. Damit das alles etwas\
+    \ plausibler wird. Einfach mal ausf\xFChren und ein bisschen was \xE4ndern, um\
+    \ zu schauen was passiert.\n\nWas muss in der letzten Zeile ge\xE4ndert werden,\
+    \ damit\n```\nMoin Inge\nMoin Siegried\n```\nausgegeben wird?"
+  title: Noch eins
+- check: |-
+    def _Check(scope, output):
+        if ('Roflkopter' in output and
+            'ausgabe' in scope.keys() and scope['ausgabe'] == 'Roflkopter'):
+            return True, 'War ja auch logisch.'
+        elif 'Traceback' in output:
+            return False, 'Rot ist tot.'
+        else:
+            return False, 'Kurz davor ist leider immer noch falsch.'
+  code: |-
+    def hi():
+      print('Roflkopter')
+
+
+    hi()
+    ausgabe = '42'
+
+    # hi() koennte so oft aufgerufen werden wie wir wollen
+  id: 23
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Die Dinger werden so h\xE4ufig benutzt, dass wir damit jetzt etwas herumspielen\
+    \ m\xFCssen.\nWir brauchen auch gar keine Argumente in der Funktion. Also die\
+    \ Teile in den Klammern neben dem Funktionsnamen.\n\nWie hier zum Beispiel. Was\
+    \ wird hier ausgegeben? (`ausgabe` auf den richtigen Wert setzen)"
+  title: Variation A
+- check: |-
+    def _Check(scope, output):
+        if ('True' in output and 'two' in scope.keys() and
+            'add_one' in scope.keys() and 'a' in scope.keys() and
+            'value' in scope.keys() and 'result' in scope.keys() and
+            scope['value'] == 5 and scope['value'] == scope['result']):
+            return True, 'Ja. Genau. Gut, gut.'
+        elif 'Traceback' in output:
+            return False, 'Das mochte Python nun gar nicht leiden.'
+        else:
+            return False, 'Ha ha ha. Neeeee.'
+  code: |-
+    def two():
+      return 2
+
+    def add_one(e):
+      return e + 1
+
+    a = 5
+    value = 1 + add_one(a - two())
+
+    result = 0
+    print(value == result)
+  id: 24
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Und dann gibt es da noch etwas ganz hilfreiches. Stell Dir mal vor, dass\
+    \ Du die zusammengesetzten Nachrichten nicht sofort ausgegeben m\xF6chtest, sondern\
+    \ sie nur abspeichern willst, oder sp\xE4ter noch ver\xE4ndern m\xF6chtest.\n\n\
+    F\xFCr so etwas gibt es R\xFCckgabewerte (return values) und damit k\xF6nnen wir\
+    \ ganz geschickte Sachen machen.\n\nEin simples Beispiel f\xFCr einen R\xFCckgabewert\
+    \ w\xE4re\n```\ndef immer_zwei():\n  return 2\n\nzwei = immer_zwei()\n```\n\n\
+    Ab jetzt kann der Funktionsaufruf genau so wie eine Variable benutzt werden. Nur,\
+    \ dass sie eben vorher alles innerhalb der Funktion macht. Etwas aufregender,\
+    \ aber noch immer nicht so richtig, w\xE4re zum Beispiel\n```\ndef plus_eins(var):\n\
+    \  return var + 1\n\na = 2\nb = 3\nc = plus_eins(a) + b\n```\n\nDas wird nat\xFC\
+    rlich schnell wir... Also machen wir es wirrer (und verschaltelter) und fragen\
+    \ einfach mal nach dem Wert von `value`."
+  title: Variation B
 global-code: '# Hier kommen globale Funktionen rein'
 passed: 0
 title: Starterpack
