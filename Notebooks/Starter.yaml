@@ -71,10 +71,10 @@ cells:
     \ Beispiel etwas... 'konstruiert' ist.\nEs wird sp\xE4ter noch aufregender, aber\
     \ hier sehen wir schonmal alle wichtigen Teile.)\n\nDaf\xFCr kopier den folgenden\
     \ Code in das rechte 'Global Functions' Fenster (und \xFCberschreib alles andere\
-    \ darin).\n```\ndef gesamt_kosten(self, gerichte, anzahl):\n    betrag = 0.0\n\
-    \    for kosten in gerichte:\n        betrag += kosten\n    if betrag <= 0.0:\n\
-    \        return 0.0\n    return betrag / anzahl\n```\n\nInsgesamt ist es wohl\
-    \ sehr hilfreich mal an den einzelnen Werten (unter dem `---` Kommentar) herumzuspielen.\n\
+    \ darin).\n```\ndef gesamt_kosten(gerichte, anzahl):\n    betrag = 0.0\n    for\
+    \ kosten in gerichte:\n        betrag += kosten\n    if betrag <= 0.0:\n     \
+    \   return 0.0\n    return betrag / anzahl\n```\n\nInsgesamt ist es wohl sehr\
+    \ hilfreich mal an den einzelnen Werten (unter dem `---` Kommentar) herumzuspielen.\n\
     Also den Name vom Restaurant mal \xE4ndern, oder die Preise der einzelnen Gerichte.\n\
     Um hier weiterzukommen, m\xFCssen 5 Leute mitessen."
   title: Motivation
@@ -724,9 +724,40 @@ cells:
     \ dass sie eben vorher alles innerhalb der Funktion macht. Etwas aufregender,\
     \ aber noch immer nicht so richtig, w\xE4re zum Beispiel\n```\ndef plus_eins(var):\n\
     \  return var + 1\n\na = 2\nb = 3\nc = plus_eins(a) + b\n```\n\nDas wird nat\xFC\
-    rlich schnell wir... Also machen wir es wirrer (und verschaltelter) und fragen\
+    rlich schnell wirr... Also machen wir es wirrer (und verschaltelter) und fragen\
     \ einfach mal nach dem Wert von `value`."
   title: Variation B
+- check: "def _Check(scope, output):\n    if 'Traceback' in output:\n        return\
+    \ False, 'Also mit einem Fehler geht das ja nicht...'\n    else:\n        return\
+    \ True, 'Herzlichen Gl\xFChstrumpf.'"
+  code: |-
+    gericht = []
+    gericht.append(10)  # Kosten vom ersten Gericht (10)
+    gericht.append(15)  # Kosten vom zweiten
+    gericht.append(8)   # Kosten vom dritten
+
+    mitesser = 4  # Anzahl der Mitessenden
+    kosten = gesamt_kosten(gerichte, mitesser)  # Berechne die Gesamtkosten aus
+    print(kosten)  # Gebe die Kosten aus
+  id: 25
+  output: ''
+  response:
+    display: none
+    message: ''
+  text: "Und jetzt sind wir haben wir irgendwie alles, was wir brauchen, damit wir\
+    \ das Beispiel vom Anfang bauen k\xF6nnen.\n\nIch hoffe der folgende Code steht\
+    \ noch im global Code Fenster:\n```\ndef gesamt_kosten(gerichte, anzahl):\n  \
+    \  betrag = 0.0\n    for kosten in gerichte:\n        betrag += kosten\n    if\
+    \ betrag <= 0.0:\n        return 0.0\n    return betrag / anzahl\n```\n\nHoffentlich\
+    \ ergibt der gr\xF6\xDFte Teil davon jetzt Sinn.\n\n1. Wir haben eine Funktion\
+    \ namens `gesamt_kosten`, der man eine Liste an Gerichten \xFCbergibt und dann\
+    \ noch sagt, durch wie viele Leute der Betrag geteilt werden soll.\n2. Dann summieren\
+    \ wir den Betrag auf und teilen ihn durch die Anzahl.\n3. Wenn allerdings die\
+    \ Summe negativ ist (vielleicht weil ein Depp negative Werte \xFCbergeben hat),\
+    \ dann geben wir `0.0` zur\xFCck.\n\nUnd damit sollte auch der Code weiter unten\
+    \ Sinn ergeben. Erst sammeln wir die Kosten, dann rechnen wir alles aus und dann\
+    \ geben wir den Betrag pro Person aus.\n\nSo ist das mit den Crash-Kursen..."
+  title: Finale
 global-code: '# Hier kommen globale Funktionen rein'
 passed: 0
 title: Starterpack
