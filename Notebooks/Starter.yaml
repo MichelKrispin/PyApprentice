@@ -33,7 +33,6 @@ cells:
         else:
           return False, 'Versuch es doch einfach nochmal.'
     code: |-
-      # Diese Zeile beschreibt nur etwas (und das nicht sehr gut...)
       # message = 'Hallo'
       # print(message)  # Hier wird wieder etwas ausgegeben
     id: 1
@@ -45,10 +44,8 @@ cells:
       "Wir fangen mal klein an.\nCode wird immer Zeile f\xFCr Zeile geschrieben\
       \ und in Python muss\njede Zeile korrekt einger\xFCckt werden (also im Moment\
       \ noch ganz links anfangen)\nWenn vor einer Zeile ein `#` steht, dann ist diese\
-      \ Zeile auskommentiert und wird ignoriert.\n\nMache aus den richtigen Zeilen wieder\
-      \ Code, der nicht als Kommentar interpretiert wird,\nindem die `#` an den\
-      \ richtigen Stellen entfernt werden\n(und dann auch die Leerzeichen direkt dahinter;\
-      \ Stichwort ganz links anfangen)."
+      \ Zeile auskommentiert und wird ignoriert.\n\nMache aus den Zeilen wieder\
+      \ Code, die nicht als Kommentar interpretiert werden,\nindem du die `#` wegnimmst."
     title: Kommentare
   - check: |-
       def _Check(scope, output):
@@ -56,8 +53,7 @@ cells:
           if 'Global Code' in output:
             return False, 'Da ist wohl was beim kopieren schief gegangen.'
           return False, 'Nope.'
-        elif ('mitesser' in scope.keys() and scope['mitesser'] == 5 and
-              'kosten' in scope.keys() and scope['kosten'] == 6.6):
+        elif 'mitesser' in scope.keys() and scope['mitesser'] == 5:
           return True, 'Locker flockig.'
         else:
           return False, 'Nicht so wirklich...'
@@ -88,7 +84,7 @@ cells:
       \ darin).\n```\ndef gesamt_kosten(gerichte, anzahl):\n    betrag = 0.0\n    for\
       \ kosten in gerichte:\n        betrag += kosten\n    if betrag <= 0.0:\n     \
       \   return 0.0\n    return betrag / anzahl\n```\n\nInsgesamt ist es wohl sehr\
-      \ hilfreich mal an den einzelnen Werten (unter dem `---` Kommentar) herumzuspielen.\n\
+      \ hilfreich mal an den einzelnen Werten herumzuspielen.\n\
       Also den Name vom Restaurant mal \xE4ndern, oder die Preise der einzelnen Gerichte.\n\
       Um hier weiterzukommen, m\xFCssen 5 Leute mitessen."
     title: Motivation
@@ -181,8 +177,8 @@ cells:
       def _Check(scope, output):
           if 'Traceback' in output:
               return False, 'Da scheint irgendwas kaputt gegangen zu sein.'
-          elif 'pizza' in scope.keys() and 'gemuese' in scope.keys() and 'gesamt' in scope.keys():
-            if (scope['pizza'] == 5.99 and scope['gemuese'] == 1.99 and
+          elif ('pizza' in scope.keys() and 'gemuese' in scope.keys() and 'gesamt' in scope.keys() and
+                scope['pizza'] == 5.99 and scope['gemuese'] == 1.99 and
                 scope['pizza'] + scope['gemuese'] == scope['gesamt']):
               return True, 'Dafür kannst Du Dir jetzt aber auch mal auf die Schulter klopfen.'
           elif 'p' in scope.keys() or 'g' in scope.keys() or 'o' in scope.keys():

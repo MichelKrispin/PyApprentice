@@ -1,124 +1,125 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>PyApprentice</title>
     <link
-            rel="shortcut icon"
-            href="./favicon.ico"
-            type="image/vnd.microsoft.icon"
+      rel="shortcut icon"
+      href="/static/favicon.ico"
+      type="image/vnd.microsoft.icon"
     />
     <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-            type="text/css"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+      type="text/css"
     />
     <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-            integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <style type="text/css" media="screen">
-        .editor {
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            height: 132px;
-        }
+      .editor {
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        height: 132px;
+      }
 
-        #global-editor {
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            height: 75vh;
-        }
+      #global-editor {
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        height: 75vh;
+      }
 
-        .ace_gutter-layer > * {
-            /* Make the gutter smaller */
-            margin-left: -16px;
-        }
+      .ace_gutter-layer > * {
+        /* Make the gutter smaller */
+        margin-left: -16px;
+      }
     </style>
-</head>
-<body>
-<div class="container is-fluid">
-    <section class="hero">
+  </head>
+  <body>
+    <div class="container is-fluid">
+      <section class="hero">
         <div class="hero-body">
-            <p class="title">
-                <span id="title">Server not connected</span>
-                <a class="button ml-6"
-                   href="{{ home }}">
-                    <span class="icon-text">
-                      <span class="icon">
-                        <i class="fas fa-home"></i>
-                      </span>
-                    </span>
-                </a>
-            </p>
-
+          <p class="title">
+            <span id="title">Server not connected</span>
+            <a class="button ml-6" href="{{ home }}">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-home"></i>
+                </span>
+              </span>
+            </a>
+          </p>
         </div>
+      </section>
 
-    </section>
-
-    <!-- Main container -->
-    <div class="columns">
+      <!-- Main container -->
+      <div class="columns">
         <div class="column is-three-fifths" id="tasks">
-            <div class="box">
-                <div class="columns is-vcentered">
-                    <div class="column">
-                        <p class="title is-4">Task</p>
-                    </div>
-                    <div class="column">
-                        <button class="button is-primary is-pulled-right">
-                            <span>Run</span>
-                            <span class="icon is-small">
+          <div class="box">
+            <div class="columns is-vcentered">
+              <div class="column">
+                <p class="title is-4">Task</p>
+              </div>
+              <div class="column">
+                <button class="button is-primary is-pulled-right">
+                  <span>Run</span>
+                  <span class="icon is-small">
                     <i class="fas fa-play"></i>
                   </span>
-                        </button>
-                    </div>
-                </div>
+                </button>
+              </div>
+            </div>
 
-                <div class="block content">
-                    It seems that the server is not running or that there is a problem with the connection.
-                </div>
-                <div id="editor-1"></div>
-                <article class="message">
-                    <div class="message-body" style="font-family: monospace">
-                        <p>
-                            Traceback (most recent call<br/>
-                            File &quot;&ltstdin&gt&quot;, line 1, in <br/>
-                            IndexError: list index out of range
-                        </p>
-                    </div>
-                </article>
+            <div class="block content">
+              It seems that the server is not running or that there is a problem
+              with the connection.
             </div>
+            <div id="editor-1"></div>
+            <article class="message">
+              <div class="message-body" style="font-family: monospace">
+                <p>
+                  Traceback (most recent call<br />
+                  File &quot;&ltstdin&gt&quot;, line 1, in <br />
+                  IndexError: list index out of range
+                </p>
+              </div>
+            </article>
+          </div>
         </div>
-        <div class="column" style="position: fixed; right: 0; top: 5%; width: 40%;">
-            <div class="box">
-                <p class="title is-4">Global Functions</p>
-                <div id="global-editor"></div>
-            </div>
+        <div
+          class="column"
+          style="position: fixed; right: 0; top: 5%; width: 40%"
+        >
+          <div class="box">
+            <p class="title is-4">Global Functions</p>
+            <div id="global-editor"></div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-<script
-        src="/static/ace/ace.js"
-        type="text/javascript"
-        charset="utf-8"
-></script>
-<script
-        src="/static/showdown.min.js"
-        type="text/javascript"
-        charset="utf-8"
-></script>
-<script
-        src="/static/main.js"
-        type="text/javascript"
-        charset="utf-8"
-></script>
-</body>
+    <script
+      src="/static/ace/ace.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="/static/showdown.min.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="/static/main.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+  </body>
 </html>

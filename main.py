@@ -67,6 +67,7 @@ class CellHandler:
         caught_exception = False
         result = False
         output = ''
+        message = ''
         if global_code != '':
             f = StringIO()
             with redirect_stdout(f):

@@ -1,74 +1,75 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>PyApprentice</title>
     <link
-            rel="shortcut icon"
-            href="./favicon.ico"
-            type="image/vnd.microsoft.icon"
+      rel="shortcut icon"
+      href="./favicon.ico"
+      type="image/vnd.microsoft.icon"
     />
     <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-            type="text/css"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+      type="text/css"
     />
     <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-            integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
-
-</head>
-<body>
-<div class="container is-fluid">
-    <section class="hero is-centered">
+  </head>
+  <body>
+    <div class="container is-fluid">
+      <section class="hero is-centered">
         <div class="hero-body">
-            <p class="title">Good Morning</p>
+          <p class="title">Good Morning</p>
         </div>
-    </section>
+      </section>
 
-    <!-- Main container -->
-    <div class="columns is-centered">
+      <!-- Main container -->
+      <div class="columns is-centered">
         <div class="column is-three-fifths">
-            {% for notebook in notebooks %}
-            <div class="box">
-                <div class="columns is-vcentered">
-                    <div class="column">
-                        <p class="title is-4">{{ notebook['name'].capitalize() }}</p>
-                    </div>
-                    <div class="column">
-                        <a class="button is-info is-pulled-right"
-                           href="{{ notebook['url'] }}">
-                            <span>Go</span>
-                            <span class="icon is-medium">
-                            <i class="fas fa-play"></i>
-                            </span>
-                        </a>
-                    </div>
-                </div>
+          {% for notebook in notebooks %}
+          <div class="box">
+            <div class="columns is-vcentered">
+              <div class="column">
+                <p class="title is-4">{{ notebook['name'].capitalize() }}</p>
+              </div>
+              <div class="column">
+                <a
+                  class="button is-info is-pulled-right"
+                  href="{{ notebook['url'] }}"
+                >
+                  <span>Go</span>
+                  <span class="icon is-medium">
+                    <i class="fas fa-play"></i>
+                  </span>
+                </a>
+              </div>
             </div>
-            {% end for %}
+          </div>
+          {% end for %}
         </div>
+      </div>
     </div>
-</div>
-<script
-        src="/static/ace/ace.js"
-        type="text/javascript"
-        charset="utf-8"
-></script>
-<script
-        src="/static/showdown.min.js"
-        type="text/javascript"
-        charset="utf-8"
-></script>
-<script
-        src="/static/main.js"
-        type="text/javascript"
-        charset="utf-8"
-></script>
-</body>
+    <script
+      src="/static/ace/ace.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="/static/showdown.min.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="/static/main.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+  </body>
 </html>

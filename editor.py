@@ -151,14 +151,13 @@ def main(file_name):
             i = get_highest_id(data)
             data['cells'].append({
                 'check': """def _Check(scope, output):
-    if "" in output:
-        return True, 'Wundervoll.'
-    elif 'Traceback' in output:
+    if 'Traceback' in output:
         return False, 'Exception'
+    elif '' in output:
+        return True, 'Wundervoll.'
     else:
-        return False, 'Und so sieht es aus, wenn es noch nicht ganz richtig ist.'""",
-                'code': """# Python Code
-    print('Hello')""",
+        return False, 'Ne'""",
+                'code': """# Python Code\nprint('Hello')""",
                 'id': i + 1,
                 'output': '',
                 'response': {
