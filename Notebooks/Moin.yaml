@@ -7,12 +7,12 @@ cells:
         return False, 'So sieht ein Python Fehler aus.'
       else:
         return False, 'Und jetzt brauchen wir noch Moin.'
-  code: print('Hallo'
+  code: print('Moin')
   id: 0
-  output: ''
+  output: Moin<br>
   response:
-    display: none
-    message: ''
+    display: success
+    message: Aufregend!
   text: "Also das ist so.\nOben rechts auf `Run` dr\xFCcken f\xFChrt den Code hier\
     \ drunter aus.\n\nAber wie wir wissen: Rot ist tot.\n\nAlso sollte da eine Klammer\
     \ noch hin.\n\nUnd dann w\xFCrden wir gerne `Moin` ausgeben und nicht `Hallo`."
@@ -21,12 +21,14 @@ cells:
     \ == 152 and 'Waffeleisen' in output:\n    return True, 'War ja doch etwas zu\
     \ einfach...'\n  elif 'Traceback' in output:\n    return False, 'Neee. Nichts\
     \ kaputt machen.'\n  else:\n    return False, 'N\xE4h.'"
-  code: "schwabbel = \nprint()"
+  code: |-
+    schwabbel = 152
+    print('Waffeleisen')
   id: 1
-  output: ''
+  output: Waffeleisen<br>
   response:
-    display: none
-    message: ''
+    display: success
+    message: War ja doch etwas zu einfach...
   text: |-
     Jetzt probieren wir mal etwas Aufregenderes.
 
@@ -41,18 +43,25 @@ cells:
     \ scope.keys():\n      return False, 'Sicher, dass der Code r\xFCberkopiert wurde?'\n\
     \    else:\n      return False, 'Jetzt brauchen wir nur noch die richtigen Nullstellen.'\n\
     \  return False, 'Also x_1 und x_2 muss es schon geben.'"
-  code: "x_1 = \nx_2 = \nprint(f(x_1) + f(x_2))"
+  code: |-
+    import math
+    x_1 = 3/4 - math.sqrt(41)/4
+    x_2 = 3/4 + math.sqrt(41)/4
+    #(f(x_1) + f(x_2))
+    print(0)
   id: 2
-  output: ''
+  output: 0<br>
   response:
-    display: none
-    message: ''
+    display: success
+    message: "Herzlichen Gl\xFChstrumpf. Das wars auch schon."
   text: "Und um es auf die Spitze zu treiben.\n\nBitte in das 'Global Functions' Feld\
     \ rechts den folgenden Code kopieren:\n```\ndef f(x):\n  return 3*x - 2*x**2 +\
     \ 4\n```\n\nWir suchen:\n- eine Variable `x_1` mit der ersten Nullstelle von `f(x)`,\n\
     - eine Variable `x_2` mit der zweiten Nullstelle von `f(x)`,\n- nat\xFCrlich die\
     \ Ausgabe `0`."
   title: Spannung pur
-global-code: '# Hier steht globaler Code'
-passed: 0
+global-code: |
+  def f(x):
+    return 3*x - 2*x**2 + 4
+passed: 3
 title: Moin

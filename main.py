@@ -50,8 +50,9 @@ class CellHandler:
         calls the check function with the result.
 
         Args:
-            code ([type]): [description]
-            id ([type]): [description]
+            global_code (str): The global code that will be run before.
+            code (str): The code that will be run for the cell.
+            id (int): The id of this cell.
         """
         # Get the correct cell or raise an exception if it doesn't exist
         cell = None

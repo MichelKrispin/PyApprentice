@@ -10,12 +10,12 @@ cells:
         return False, 'This is how an exception looks like.'
       else:
         return False, 'There is not even the variable a.'
-  code: b = 4
+  code: a = 5
   id: 0
   output: ''
   response:
-    display: warning
-    message: There is not even the variable a.
+    display: success
+    message: Easy, right?
   text: |-
     ## This is the next chapter.
 
