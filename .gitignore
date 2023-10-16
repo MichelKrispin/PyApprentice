@@ -7,3 +7,5 @@ lib
 build
 env/
 venv/
+
+.vscode

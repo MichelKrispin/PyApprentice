@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>PyApprentice</title>
+    <title>PyApprentice Editor</title>
     <link
       rel="shortcut icon"
       href="/static/favicon.ico"
@@ -30,14 +30,6 @@
         height: 132px;
       }
 
-      #global-editor {
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        height: 75vh;
-      }
-
       .ace_gutter-layer > * {
         /* Make the gutter smaller */
         margin-left: -16px;
@@ -46,62 +38,102 @@
   </head>
   <body>
     <div class="container is-fluid">
-      <section class="hero">
-        <div class="hero-body">
-          <p class="title">
-            <span id="title">Server not connected</span>
-            <a class="button ml-6" href="{{ home }}">
-              <span class="icon-text">
-                <span class="icon">
-                  <i class="fas fa-home"></i>
-                </span>
-              </span>
-            </a>
-          </p>
-        </div>
-      </section>
-
       <!-- Main container -->
-      <div class="columns">
-        <div class="column is-three-fifths" id="tasks">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
           <div class="box">
-            <div class="columns is-vcentered">
-              <div class="column">
-                <p class="title is-4">Task</p>
-              </div>
-              <div class="column">
-                <button class="button is-primary is-pulled-right">
-                  <span>Run</span>
-                  <span class="icon is-small">
-                    <i class="fas fa-play"></i>
-                  </span>
-                </button>
+            <!-- Editor fields -->
+
+            <div class="field">
+              <div class="control">
+                <div class="select">
+                  <select id="select-notebook" onchange="getNotebookData()">
+                    {% for notebook in notebooks %}
+                    <option>{{ notebook }}</option>
+                    {% end for %}
+                  </select>
+                </div>
               </div>
             </div>
 
-            <div class="block content">
-              It seems that the server is not running or that there is a problem
-              with the connection.
-            </div>
-            <div id="editor-1"></div>
-            <article class="message">
-              <div class="message-body" style="font-family: monospace">
-                <p>
-                  Traceback (most recent call<br />
-                  File &quot;&ltstdin&gt&quot;, line 1, in <br />
-                  IndexError: list index out of range
-                </p>
+            <div class="field is-horizontal">
+              <div class="field-label is-large">
+                <label class="label">Title</label>
               </div>
-            </article>
-          </div>
-        </div>
-        <div
-          class="column"
-          style="position: fixed; right: 0; top: 5%; width: 40%"
-        >
-          <div class="box">
-            <p class="title is-4">Global Functions</p>
-            <div id="global-editor"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left has-icons-right">
+                    <input
+                      class="input is-large"
+                      type="text"
+                      id="title"
+                      placeholder="Title"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Text</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left has-icons-right">
+                    <div class="editor" id="editor-text"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="block" id="editor-text-output"></div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Code</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left has-icons-right">
+                    <div class="editor" id="editor-code"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Check</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left has-icons-right">
+                    <div class="editor" id="editor-check"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <button class="button is-primary">
+                      <span> Update </span>
+                      <span class="icon is-medium">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

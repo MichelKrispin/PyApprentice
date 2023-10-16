@@ -1,10 +1,13 @@
-/* Initialize the global editor. */
+// =====
+// Editor settings
+// =====
+
 const default_settings = {
   showPrintMargin: false,
   wrap: true,
   theme: 'ace/theme/solarized_dark',
   mode: 'ace/mode/python',
-  fontSize: '14pt',
+  fontSize: '12pt',
 };
 
 // Make the gutter smaller
@@ -17,124 +20,59 @@ const smallerGutterRenderer = {
   },
 };
 
-let editors = {
-  'global-editor': ace.edit('global-editor', default_settings),
-};
-editors['global-editor'].session.gutterRenderer = smallerGutterRenderer;
-
 function resizeEditor(editor, id, numLines) {
   document.getElementById(id).style.height =
     numLines * editor.renderer.lineHeight + 'px';
   editor.resize();
 }
 
+// =====
+// Initialize all editors
+// =====
+
 // For markdown conversion
 const converter = new showdown.Converter({ tables: true });
 
-/* Check for the WebSocket connection and act appropiately. */
-let ws = new WebSocket('ws://localhost:8000/ws');
-ws.onopen = function () {
-  console.log(
-    'PyApprentice Editor successfully connected.\n\n\t🎉 Have fun 🎉\n\n'
+let editorText = ace.edit('editor-text', {
+  ...default_settings,
+  mode: 'ace/mode/markdown',
+});
+editorText.session.gutterRenderer = smallerGutterRenderer;
+editorText.setValue('Placeholder!');
+resizeEditor(editorText, 'editor-text', 15);
+editorText.getSession().on('change', function () {
+  document.getElementById('editor-text-output').innerHTML = converter.makeHtml(
+    editorText.getSession().getValue()
   );
-};
+});
 
-ws.onclose = function () {
-  alert(
-    'There is some error. Please restart the Program.\nIf that does not help contact someone who knows what to do.'
+let editorCode = ace.edit('editor-code', default_settings);
+editorCode.session.gutterRenderer = smallerGutterRenderer;
+editorCode.setValue('Placeholder!');
+resizeEditor(editorCode, 'editor-code', 15);
+
+let editorCheck = ace.edit('editor-check', default_settings);
+editorCheck.session.gutterRenderer = smallerGutterRenderer;
+editorCheck.setValue('Placeholder!');
+resizeEditor(editorCheck, 'editor-check', 15);
+
+// =====
+// On change callback
+// =====
+
+// Update the data by requesting all necessary data
+async function getNotebookData() {
+  const notebook = document.getElementById('select-notebook').value;
+  const response = await fetch(
+    'notebook?' +
+      new URLSearchParams({
+        notebook: notebook,
+      })
   );
-};
-
-ws.onmessage = function (evt) {
-  data = JSON.parse(evt.data);
-  editors['global-editor'].setValue(data['global-code']);
-  document.getElementById('title').innerHTML = data['title'];
-  cells_html = Array.from(' '.repeat(data['cells'].length));
-  data['cells'].forEach((cell) => {
-    if (cell['id'] <= data['passed']) {
-      cells_html[cell['id']] = `
-            <div class="box content">
-              <div class="columns is-vcentered">
-                <div class="column">
-                  <p class="title is-4">${cell['title']}</p>
-                </div>
-                <div class="column">
-                  <button
-                    class="button is-primary is-pulled-right"
-                    onclick="runCell(${cell['id']})"
-                  >
-                    <span>Run</span>
-                    <span class="icon is-small">
-                      <i class="fas fa-play"></i>
-                    </span>
-                  </button>
-                </div>
-              </div>
-              <div class="block">
-              ${converter.makeHtml(cell['text'])}
-              </div>
-              <div class="editor" id="editor-${cell['id']}"></div>
-          `;
-      if (cell['response']['display'] !== 'none') {
-        cells_html[cell['id']] += `
-                <article class="message is-${cell['response']['display']}">
-                  <div class="message-body" style="font-family: monospace">
-                    <p>
-                      ${cell['output']}
-                    </p>
-                  </div>
-                </article>
-                `;
-
-        if (cell['response']['message']) {
-          cells_html[cell['id']] += `
-                <article class="message">
-                  <div class="message-body" style="font-family: monospace">
-                    <p>
-                      ${cell['response']['message']}
-                    </p>
-                  </div>
-                </article>
-            `;
-        }
-      }
-    }
-    cells_html[cell['id']] += '</div>';
-  });
-  document.getElementById('tasks').innerHTML = cells_html.join('\n');
-  data['cells'].forEach((cell) => {
-    if (cell['id'] <= data['passed']) {
-      let editor = ace.edit(`editor-${cell['id']}`, default_settings);
-      editor.session.gutterRenderer = smallerGutterRenderer;
-      editor.commands.addCommand({
-        name: 'sendCell',
-        bindKey: { win: 'Ctrl-Enter' },
-        exec: function (editor) {
-          runCell(cell['id']);
-        },
-      });
-      editor.setValue(cell['code']);
-      resizeEditor(editor, `editor-${cell['id']}`, 10);
-      editors[`editor-${cell['id']}`] = editor;
-    }
-  });
-
-  // After updating everything set the css classes to header
-  ['h2', 'h3', 'h4', 'h5'].forEach((h) => {
-    const elements = document.getElementsByTagName(h);
-    for (let i = 0; i < elements.length; i++) {
-      const el = elements[i];
-      el.setAttribute('class', 'title is-' + (parseInt(h[1]) + 3));
-    }
-  });
-};
-
-function runCell(id) {
-  ws.send(
-    JSON.stringify({
-      id: id,
-      'global-code': editors['global-editor'].getValue(),
-      code: editors[`editor-${id}`].getValue(),
-    })
-  );
+  if (!response.ok) {
+    throw new Error('Network response was not OK');
+  }
+  const data = await response.json();
+  console.log(data);
+  // TODO!!
 }
