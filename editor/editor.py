@@ -6,6 +6,7 @@ import yaml
 import webbrowser
 import tornado.ioloop
 import tornado.web
+import tornado.escape
 import tornado.websocket
 
 import re
@@ -36,21 +37,19 @@ class HomeHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("static/index.html", notebooks=self.notebooks)
 
-    def post(self):
-        args = self.request.arguments
-        print(self.get_body_argument("fname", default=None, strip=False))
-
-        self.render("static/index.html", notebooks=self.notebooks)
-
 
 class NotebookHandler(tornado.web.RequestHandler):
     def get(self):
         notebook = self.request.arguments["notebook"][0].decode()
         with open(f"../Notebooks/{notebook}", "r") as f:
             data = yaml.safe_load(f)
-        json_data = r = json.dumps(data)
-        print(json_data)
         self.write(data)
+
+    def post(self):
+        data = tornado.escape.json_decode(self.request.body)
+        print(data)
+
+        self.write({'success': True})
 
 
 def make_app():
@@ -69,4 +68,3 @@ if __name__ == "__main__":
     app.listen(8001)
     # webbrowser.open("http://localhost:8001/")
     tornado.ioloop.IOLoop.current().start()
-[]

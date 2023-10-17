@@ -44,14 +44,21 @@
           <div class="box">
             <!-- Editor fields -->
 
-            <div class="field">
-              <div class="control">
-                <div class="select">
-                  <select id="select-notebook" onchange="getNotebookData()">
-                    {% for notebook in notebooks %}
-                    <option>{{ notebook }}</option>
-                    {% end for %}
-                  </select>
+            <div class="field is-horizontal">
+              <div class="field-label is-large">
+                <label class="label">Notebook</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select">
+                      <select id="select-notebook" onchange="getNotebookData()">
+                        {% for notebook in notebooks %}
+                        <option>{{ notebook }}</option>
+                        {% end for %}
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -62,11 +69,119 @@
               </div>
               <div class="field-body">
                 <div class="field">
-                  <div class="control has-icons-left has-icons-right">
+                  <div class="control">
                     <input
                       class="input is-large"
                       type="text"
                       id="title"
+                      placeholder="Title"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Global Code</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="editor" id="editor-global-code"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- Cell fields -->
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <button
+                      class="button is-primary is-large is-fullwidth"
+                      onclick="addCell()"
+                    >
+                      <span> Add </span>
+                      <span class="icon is-medium">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <button
+                      class="button is-primary is-large is-fullwidth"
+                      onclick="moveCellLeft()"
+                    >
+                      <span class="icon is-medium">
+                        <i class="fas fa-arrow-left"></i>
+                      </span>
+                      <span> Move </span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    <button
+                      class="button is-primary is-large is-fullwidth"
+                      onclick="moveCellRight()"
+                    >
+                      <span> Move </span>
+                      <span class="icon is-medium">
+                        <i class="fas fa-arrow-right"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <button
+                      class="js-modal-trigger button is-danger is-large is-fullwidth"
+                      data-target="delete-modal"
+                    >
+                      <span> Delete </span>
+                      <span class="icon is-medium">
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Cell</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <div class="select">
+                      <select id="select-cell" onchange="changeCell()"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Cell Title</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      id="cell-title"
                       placeholder="Title"
                     />
                   </div>
@@ -87,9 +202,17 @@
               </div>
             </div>
             <div class="field is-horizontal">
-              <div class="field-label"></div>
+              <div class="field-label">
+                <label class="label">Text Preview</label>
+              </div>
               <div class="field-body">
-                <div class="block" id="editor-text-output"></div>
+                <div class="card">
+                  <div class="card-content">
+                    <div class="content">
+                      <div class="block" id="editor-text-output"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -99,7 +222,7 @@
               </div>
               <div class="field-body">
                 <div class="field">
-                  <div class="control has-icons-left has-icons-right">
+                  <div class="control">
                     <div class="editor" id="editor-code"></div>
                   </div>
                 </div>
@@ -112,7 +235,7 @@
               </div>
               <div class="field-body">
                 <div class="field">
-                  <div class="control has-icons-left has-icons-right">
+                  <div class="control">
                     <div class="editor" id="editor-check"></div>
                   </div>
                 </div>
@@ -124,7 +247,10 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <button class="button is-primary">
+                    <button
+                      class="button is-primary is-large is-fullwidth"
+                      onclick="updateCell()"
+                    >
                       <span> Update </span>
                       <span class="icon is-medium">
                         <i class="fas fa-upload"></i>
@@ -138,6 +264,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Sure to delete modal -->
+    <div id="delete-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Delete the cell?</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <footer class="modal-card-foot">
+          <button class="button is-danger is-fullwidth" onclick="deleteCell()">
+            Delete
+          </button>
+          <button class="button is-fullwidth">Cancel</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Custom scripts -->
     <script
       src="/static/ace/ace.js"
       type="text/javascript"
