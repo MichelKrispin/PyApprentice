@@ -64,26 +64,33 @@ resizeEditor(editorCheck, 'editor-check', 15);
 // Global variables
 // =====
 
-let cellData = {};
+let cellData = {}; // The cell data saved locally
+var lastCellId = 0; // The last selected cell id
 
 // =====
 // Update UI
 // =====
 
 function updateCellSelection() {
+  console.log('Update cell', document.getElementById('select-cell').value);
   // Inject all cell ids into the select list
   let selectCellHTML = '';
+  let cellIds = [];
   for (let i = 0; i < cellData.length; i++) {
-    selectCellHTML += `<option>${cellData[i]['id']}</option>`;
+    cellIds.push(cellData[i]['id']);
+  }
+  cellIds.sort();
+  for (let i = 0; i < cellIds.length; i++) {
+    selectCellHTML += `<option>${cellIds[i]}</option>`;
   }
   document.getElementById('select-cell').innerHTML = selectCellHTML;
+  lastCellId = document.getElementById('select-cell').value;
 }
 
 function saveCurrentCellData() {
-  const cellId = document.getElementById('select-cell').value;
   // Save the current data to the cellData
   for (let i = 0; i < cellData.length; i++) {
-    if (cellData[i]['id'] == cellId) {
+    if (cellData[i]['id'] == lastCellId) {
       cellData[i]['text'] = editorText.session.getValue();
       cellData[i]['code'] = editorCode.session.getValue();
       cellData[i]['check'] = editorCheck.session.getValue();
@@ -91,6 +98,8 @@ function saveCurrentCellData() {
       break;
     }
   }
+
+  const lastCellId = document.getElementById('select-cell').value;
 }
 
 // =====
@@ -99,6 +108,11 @@ function saveCurrentCellData() {
 
 // Update the data by requesting all necessary data
 async function getNotebookData() {
+  console.log(
+    'Get Notebook Data',
+    document.getElementById('select-cell').value
+  );
+
   const notebook = document.getElementById('select-notebook').value;
   const response = await fetch(
     'notebook?' +
@@ -137,6 +151,8 @@ function changeCell() {
       break;
     }
   }
+
+  console.log(cell);
 
   // Set the local cell values
   editorText.setValue(cell['text']);
@@ -197,10 +213,11 @@ function moveCellRight() {
     }
   }
   // Check if there actually are higher indices
-  if (higherIndices.length < 1) {
+  if (higherIndices.length < 2) {
     return;
   }
   const nextId = Math.max(...higherIndices);
+  console.log(higherIndices);
 
   // Then swap the indices
   let cellIdIdx;
@@ -231,7 +248,7 @@ function moveCellLeft() {
     }
   }
   // Check if there actually are lower indices
-  if (lowerIndices.length < 1) {
+  if (lowerIndices.length < 2) {
     return;
   }
   const previousId = Math.max(...lowerIndices);
