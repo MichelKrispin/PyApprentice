@@ -39,7 +39,7 @@ ws.onopen = function () {
 
 ws.onclose = function () {
   alert(
-    'There is some error. Please restart the Program.\nIf that does not help contact someone who knows what to do.'
+    'There is some error. Please restart the program.\nIf that does not help contact someone who knows what to do.'
   );
 };
 

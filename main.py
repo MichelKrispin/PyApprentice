@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import yaml
+import sys
 import json
 import os
 import re
@@ -15,35 +15,26 @@ from shutil import copyfile
 from io import StringIO
 from contextlib import redirect_stdout
 
-def str_presenter(dumper, data):
-  if len(data.splitlines()) > 1:  # check for multiline string
-    return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
-  return dumper.represent_scalar('tag:yaml.org,2002:str', data)
-
-yaml.add_representer(str, str_presenter)
-
-# to use with safe_dump:
-yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
 
 class CellHandler:
     def __init__(self, file_name):
-        self.file_name = file_name  # 'Notebooks/beginner_.yaml'
+        self.file_name = file_name  # 'Notebooks/beginner_.json'
         # Make a copy of the original file, if there is none
-        if not os.path.isfile(self.file_name + '.original'):
-            copyfile(self.file_name, self.file_name + '.original')
-        with open(self.file_name, 'r') as f:
-            self.data = yaml.safe_load(f)
+        if not os.path.isfile(self.file_name + ".original"):
+            copyfile(self.file_name, self.file_name + ".original")
+        with open(self.file_name, "r") as f:
+            self.data = json.load(f)
 
     def send_as_str(self):
         return json.dumps(self.data)
 
     def save(self, close=False):
         """Save the data to file."""
-        copyfile(self.file_name, self.file_name + '.backup')
-        with open(self.file_name, 'w') as f:
-            yaml.dump(self.data, f, default_flow_style=False)
+        copyfile(self.file_name, self.file_name + ".backup")
+        with open(self.file_name, "w") as f:
+            json.dump(self.data, f)
         if close:
-            os.remove(self.file_name + '.backup')
+            os.remove(f"{self.file_name}.backup")
 
     def check(self, global_code, code, id):
         """Runs the code sandboxed and
@@ -56,20 +47,20 @@ class CellHandler:
         """
         # Get the correct cell or raise an exception if it doesn't exist
         cell = None
-        for c in self.data['cells']:
-            if c['id'] == id:
+        for c in self.data["cells"]:
+            if c["id"] == id:
                 cell = c
                 break
         if not cell:
-            raise IndexError(f'Id {id} not found in the cells')
+            raise IndexError(f"Id {id} not found in the cells")
 
         # Run the global code before the users code is run
-        scope = {'__name__': 'global_code', '__builtins__': globals()['__builtins__']}
+        scope = {"__name__": "global_code", "__builtins__": globals()["__builtins__"]}
         caught_exception = False
         result = False
-        output = ''
-        message = ''
-        if global_code != '':
+        output = ""
+        message = ""
+        if global_code != "":
             f = StringIO()
             with redirect_stdout(f):
                 try:
@@ -77,10 +68,11 @@ class CellHandler:
                 except Exception as e:
                     exception = traceback.format_exc()
                     # Remove the traceback for the global code
-                    lines = exception.split('\n')
-                    output = '\n'.join([lines[0]] + lines[3:]) \
-                        .replace('<string>', 'Global Code')
-            caught_exception = output != ''
+                    lines = exception.split("\n")
+                    output = "\n".join([lines[0]] + lines[3:]).replace(
+                        "<string>", "Global Code"
+                    )
+            caught_exception = output != ""
             output = output if caught_exception else f.getvalue()
 
             # If everything went right do a little bit of reflection magic
@@ -88,13 +80,15 @@ class CellHandler:
             # knows where it comes from.
             for attr in scope:
                 try:
-                    if scope[attr].__code__.co_filename == '<string>':
-                        scope[attr].__code__ = scope[attr].__code__.replace(co_filename='Global Code')
+                    if scope[attr].__code__.co_filename == "<string>":
+                        scope[attr].__code__ = scope[attr].__code__.replace(
+                            co_filename="Global Code"
+                        )
                 except AttributeError:
                     pass
         # Run the code sent by the user in the same scope
         if not caught_exception:
-            scope['__name__'] = '__main__'
+            scope["__name__"] = "__main__"
             f = StringIO()
             with redirect_stdout(f):
                 try:
@@ -102,37 +96,46 @@ class CellHandler:
                 except Exception as e:
                     exception = traceback.format_exc()
                     # Remove the traceback for this file
-                    lines = exception.split('\n')
-                    exercise_name = cell['title']
-                    output = '\n'.join([lines[0]] + lines[3:]) \
-                        .replace('<string>', exercise_name)
-            caught_exception = output != ''
+                    lines = exception.split("\n")
+                    exercise_name = cell["title"]
+                    output = "\n".join([lines[0]] + lines[3:]).replace(
+                        "<string>", exercise_name
+                    )
+            caught_exception = output != ""
             output = output if caught_exception else f.getvalue()
 
             # Find the checking function
-            check_code = cell['check']
-            check_code += '\nresult = _Check(_Scope, _Output)'
+            check_code = cell["check"]
+            check_code += "\nresult = _Check(_Scope, _Output)"
 
-            check_scope = {'__name__': '__main__',
-                           '__builtins__': globals()['__builtins__'],
-                           '_Scope': scope, '_Output': output}
+            check_scope = {
+                "__name__": "__main__",
+                "__builtins__": globals()["__builtins__"],
+                "_Scope": scope,
+                "_Output": output,
+            }
 
             # Run the checking function in the created scope
             f = StringIO()
             with redirect_stdout(f):
                 exec(check_code, check_scope)
             # print('------\n', f.getvalue(), '------\n')
-            result, message = check_scope['result']
+            result, message = check_scope["result"]
 
         # Save data
-        self.data['global-code'] = global_code
-        if result and self.data['passed'] <= id:
-            self.data['passed'] = id + 1
-        cell['code'] = code
-        cell['output'] = tornado.escape.xhtml_escape(
-            output).replace('\n', '<br>').replace('  ', '&nbsp;&nbsp;')
-        cell['response']['display'] = 'danger' if caught_exception else ('success' if result else 'warning')
-        cell['response']['message'] = message
+        self.data["global-code"] = global_code
+        if result and self.data["passed"] <= id:
+            self.data["passed"] = id + 1
+        cell["code"] = code
+        cell["output"] = (
+            tornado.escape.xhtml_escape(output)
+            .replace("\n", "<br>")
+            .replace("  ", "&nbsp;&nbsp;")
+        )
+        cell["response"]["display"] = (
+            "danger" if caught_exception else ("success" if result else "warning")
+        )
+        cell["response"]["message"] = message
         self.save()
         # return output, result
 
@@ -144,9 +147,11 @@ def slugify(value):
     underscores) and converts spaces to hyphens. Also strips leading and
     trailing whitespace.
     """
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
-    value = re.sub('[^\w\s-]', '', value).strip().lower()
-    return re.sub('[-\s]+', '-', value)
+    value = (
+        unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+    )
+    value = re.sub("[^\w\s-]", "", value).strip().lower()
+    return re.sub("[-\s]+", "-", value)
 
 
 class RunWebSocket(tornado.websocket.WebSocketHandler):
@@ -161,32 +166,32 @@ class RunWebSocket(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         data = json.loads(message)
-        self.cell_handler.check(data['global-code'], data['code'], data['id'])
-        # print(f'{output}which is {result}\n')
+        self.cell_handler.check(data["global-code"], data["code"], data["id"])
         self.write_message(self.cell_handler.send_as_str())
 
     def on_close(self):
         self.cell_handler.save(close=True)
-        print(f'{self.cell_handler.file_name} closed and saved.')
+        print(f"{self.cell_handler.file_name} closed and saved.")
 
 
-def search_for_notebooks(notebooks):
-    for f in os.listdir('./Notebooks'):
-        if f.endswith('.yaml'):
+def search_for_notebooks(notebooks, notebook_search_path):
+    for f in os.listdir(notebook_search_path):
+        if f.endswith(".json"):
             notebooks[slugify(f[:-5])] = f
 
 
 class HomeHandler(tornado.web.RequestHandler):
-    def initialize(self, notebooks):
+    def initialize(self, notebooks, notebook_search_path):
         self.notebooks = notebooks
+        self.notebook_search_path = notebook_search_path
 
     def get(self):
-        search_for_notebooks(self.notebooks)
+        search_for_notebooks(self.notebooks, self.notebook_search_path)
         file_information = []
         for k in self.notebooks.keys():
             notebook = {
-                'url': self.reverse_url('notebook', k),
-                'name': self.notebooks[k][:-5],
+                "url": self.reverse_url("notebook", k),
+                "name": self.notebooks[k][:-5],
             }
             file_information.append(notebook)
 
@@ -194,43 +199,67 @@ class HomeHandler(tornado.web.RequestHandler):
 
 
 class NotebookHandler(tornado.web.RequestHandler):
-    def initialize(self, notebooks, cell_handlers):
+    def initialize(self, notebooks, cell_handlers, notebook_search_path):
         self.notebooks = notebooks
         self.cell_handlers = cell_handlers
+        self.notebook_search_path = notebook_search_path
 
     def get(self, slug):
-        notebook_file = './Notebooks/'
+        notebook_file = self.notebook_search_path
         try:
             notebook_file += self.notebooks[slug]
         except KeyError:
             try:
-                search_for_notebooks(self.notebooks)
+                search_for_notebooks(self.notebooks, notebook_search_path)
                 notebook_file += self.notebooks[slug]
             except KeyError:
-                print('The file does not exist. There are only ', self.notebooks.keys())
+                print("The file does not exist. There are only ", self.notebooks.keys())
                 raise tornado.web.HTTPError(404)
         cell_handler = CellHandler(notebook_file)
         if len(self.cell_handlers):
             self.cell_handlers[0] = cell_handler
         else:
             self.cell_handlers.append(cell_handler)
-        self.render("static/notebook.html", home=self.reverse_url('home'))
+        self.render("static/notebook.html", home=self.reverse_url("home"))
 
 
-def make_app():
+def make_app(notebook_search_path):
     notebooks = {}  # Very shady use of references...
     cell_handlers = []
-    return tornado.web.Application([
-        tornado.web.url(r'/', HomeHandler, dict(notebooks=notebooks), name='home'),
-        tornado.web.url(r'/ws', RunWebSocket, dict(cell_handlers=cell_handlers)),
-        tornado.web.url(r'/nb/(.*)', NotebookHandler,
-                        dict(notebooks=notebooks, cell_handlers=cell_handlers),
-                        name='notebook'),
-    ], static_path='./static')
+    return tornado.web.Application(
+        [
+            tornado.web.url(
+                r"/",
+                HomeHandler,
+                dict(notebooks=notebooks, notebook_search_path=notebook_search_path),
+                name="home",
+            ),
+            tornado.web.url(
+                r"/ws",
+                RunWebSocket,
+                dict(cell_handlers=cell_handlers),
+            ),
+            tornado.web.url(
+                r"/nb/(.*)",
+                NotebookHandler,
+                dict(
+                    notebooks=notebooks,
+                    cell_handlers=cell_handlers,
+                    notebook_search_path=notebook_search_path,
+                ),
+                name="notebook",
+            ),
+        ],
+        static_path="./static",
+    )
 
 
 if __name__ == "__main__":
-    app = make_app()
+    notebook_search_path = sys.argv[1] if len(sys.argv) > 1 else "./Notebooks/"
+    if len(sys.argv) > 1:
+        print(f"Searching for notebooks in '{notebook_search_path}'")
+    app = make_app(notebook_search_path)
     app.listen(8000)
-    webbrowser.open('http://localhost:8000/')
+    webbrowser.open("http://localhost:8000/")
+    print("\n  >> Starting at http://localhost:8000/ <<")
     tornado.ioloop.IOLoop.current().start()

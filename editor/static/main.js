@@ -65,14 +65,12 @@ resizeEditor(editorCheck, 'editor-check', 15);
 // =====
 
 let cellData = {}; // The cell data saved locally
-var lastCellId = 0; // The last selected cell id
 
 // =====
 // Update UI
 // =====
 
 function updateCellSelection() {
-  console.log('Update cell', document.getElementById('select-cell').value);
   // Inject all cell ids into the select list
   let selectCellHTML = '';
   let cellIds = [];
@@ -84,13 +82,14 @@ function updateCellSelection() {
     selectCellHTML += `<option>${cellIds[i]}</option>`;
   }
   document.getElementById('select-cell').innerHTML = selectCellHTML;
-  lastCellId = document.getElementById('select-cell').value;
 }
 
 function saveCurrentCellData() {
+  const cellId = document.getElementById('select-cell').value;
+
   // Save the current data to the cellData
   for (let i = 0; i < cellData.length; i++) {
-    if (cellData[i]['id'] == lastCellId) {
+    if (cellData[i]['id'] == cellId) {
       cellData[i]['text'] = editorText.session.getValue();
       cellData[i]['code'] = editorCode.session.getValue();
       cellData[i]['check'] = editorCheck.session.getValue();
@@ -98,8 +97,6 @@ function saveCurrentCellData() {
       break;
     }
   }
-
-  const lastCellId = document.getElementById('select-cell').value;
 }
 
 // =====
@@ -108,11 +105,6 @@ function saveCurrentCellData() {
 
 // Update the data by requesting all necessary data
 async function getNotebookData() {
-  console.log(
-    'Get Notebook Data',
-    document.getElementById('select-cell').value
-  );
-
   const notebook = document.getElementById('select-notebook').value;
   const response = await fetch(
     'notebook?' +
@@ -139,8 +131,6 @@ async function getNotebookData() {
 }
 
 function changeCell() {
-  saveCurrentCellData();
-
   // Then change the data
   const cellId = document.getElementById('select-cell').value;
   // Get the array with the correct id
@@ -151,8 +141,6 @@ function changeCell() {
       break;
     }
   }
-
-  console.log(cell);
 
   // Set the local cell values
   editorText.setValue(cell['text']);
@@ -166,13 +154,16 @@ async function updateCell() {
   saveCurrentCellData();
 
   const data = {
-    cells: cellData,
-    title: document.getElementById('title').value,
-    'global-code': editorGlobalCode.session.getValue(),
-    passed: 0,
-    response: {
-      display: 'none',
-      message: '',
+    filename: document.getElementById('select-notebook').value,
+    data: {
+      cells: cellData,
+      title: document.getElementById('title').value,
+      'global-code': editorGlobalCode.session.getValue(),
+      passed: 0,
+      response: {
+        display: 'none',
+        message: '',
+      },
     },
   };
 
@@ -203,21 +194,15 @@ function deleteCell() {
 }
 
 function moveCellRight() {
-  const cellId = document.getElementById('select-cell').value;
+  const cellId = parseInt(document.getElementById('select-cell').value);
 
-  // Get adjacent cell
-  let higherIndices = [];
-  for (let i = 0; i < cellData.length; i++) {
-    if (cellData[i]['id'] - cellId > 0) {
-      higherIndices.push(i);
-    }
-  }
-  // Check if there actually are higher indices
-  if (higherIndices.length < 2) {
+  // Get the next highest id
+  const higherIds = cellData.map((e) => e['id']).filter((e) => e > cellId);
+  if (higherIds.length < 1) {
+    // Quit if there are no adjacent cells
     return;
   }
-  const nextId = Math.max(...higherIndices);
-  console.log(higherIndices);
+  const nextHighestId = Math.min(...higherIds);
 
   // Then swap the indices
   let cellIdIdx;
@@ -225,50 +210,53 @@ function moveCellRight() {
   for (let i = 0; i < cellData.length; i++) {
     if (cellData[i]['id'] == cellId) {
       cellIdIdx = i;
-    } else if (cellData[i]['id'] == nextId) {
+    } else if (cellData[i]['id'] == nextHighestId) {
       nextIdIdx = i;
     }
   }
-  cellData[cellIdIdx]['id'] = nextId;
+
+  cellData[cellIdIdx]['id'] = nextHighestId;
   cellData[nextIdIdx]['id'] = cellId;
 
+  document.getElementById('select-cell').value = nextHighestId;
   updateCell();
-  updateCellSelection();
-  document.getElementById('select-cell').value = nextId;
+  getNotebookData().then(() => {
+    document.getElementById('select-cell').value = nextHighestId;
+    changeCell();
+  });
 }
 
 function moveCellLeft() {
-  const cellId = document.getElementById('select-cell').value;
+  const cellId = parseInt(document.getElementById('select-cell').value);
 
-  // Get adjacent cell
-  let lowerIndices = [];
-  for (let i = 0; i < cellData.length; i++) {
-    if (cellId - cellData[i]['id'] > 0) {
-      lowerIndices.push(i);
-    }
-  }
-  // Check if there actually are lower indices
-  if (lowerIndices.length < 2) {
+  // Get the next lowest id
+  const lowerIds = cellData.map((e) => e['id']).filter((e) => e < cellId);
+  if (lowerIds.length < 1) {
+    // Quit if there are no adjacent cells
     return;
   }
-  const previousId = Math.max(...lowerIndices);
+  const nextLowestId = Math.max(...lowerIds);
 
   // Then swap the indices
   let cellIdIdx;
-  let previousIdIdx;
+  let previouesIdIdx;
   for (let i = 0; i < cellData.length; i++) {
     if (cellData[i]['id'] == cellId) {
       cellIdIdx = i;
-    } else if (cellData[i]['id'] == previousId) {
-      previousIdIdx = i;
+    } else if (cellData[i]['id'] == nextLowestId) {
+      previouesIdIdx = i;
     }
   }
-  cellData[cellIdIdx]['id'] = previousId;
-  cellData[previousIdIdx]['id'] = cellId;
 
+  cellData[cellIdIdx]['id'] = nextLowestId;
+  cellData[previouesIdIdx]['id'] = cellId;
+
+  document.getElementById('select-cell').value = nextLowestId;
   updateCell();
-  updateCellSelection();
-  document.getElementById('select-cell').value = previousId;
+  getNotebookData().then(() => {
+    document.getElementById('select-cell').value = nextLowestId;
+    changeCell();
+  });
 }
 
 function addCell() {
@@ -283,7 +271,7 @@ function addCell() {
     newId = Math.max(...indices) + 1;
   }
   cellData.push({
-    check: '',
+    check: 'def _Check(scope, output):\n  return True, "Message"',
     code: '',
     text: '',
     title: '',
@@ -291,7 +279,7 @@ function addCell() {
   });
 
   updateCell();
-  updateCellSelection();
+  getNotebookData();
   document.getElementById('select-cell').value = newId;
 }
 
