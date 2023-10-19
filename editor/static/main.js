@@ -282,6 +282,7 @@ function addCell() {
     code: '',
     text: '',
     title: '',
+    response: { display: 'none', message: '' },
     id: newId,
   });
 
