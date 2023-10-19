@@ -190,7 +190,14 @@ async function updateCell() {
 }
 
 function deleteCell() {
-  console.log('TODO: Delete the cell!');
+  const cellId = parseInt(document.getElementById('select-cell').value);
+
+  // Filter out the currently selected cell
+  cellData = cellData.filter((e) => e['id'] != cellId);
+
+  // Then save the current cell data
+  updateCell();
+  getNotebookData();
 }
 
 function moveCellRight() {

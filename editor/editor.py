@@ -29,12 +29,19 @@ def slugify(value):
 
 class HomeHandler(tornado.web.RequestHandler):
     def initialize(self, notebook_search_path):
-        self.notebooks = []
-        for f in os.listdir(notebook_search_path):
-            if f.endswith(".json"):
-                self.notebooks.append(f)
+        self.notebook_search_path = notebook_search_path
 
     def get(self):
+        self.notebooks = []
+        try:
+            for f in os.listdir(self.notebook_search_path):
+                if f.endswith(".json"):
+                    self.notebooks.append(f)
+        except FileNotFoundError:
+            raise tornado.web.HTTPError(
+                status_code=404,
+                reason=f"The path '{self.notebook_search_path}' does not exist!",
+            )
         self.render("static/index.html", notebooks=self.notebooks)
 
 
@@ -44,8 +51,14 @@ class NotebookHandler(tornado.web.RequestHandler):
 
     def get(self):
         notebook = self.request.arguments["notebook"][0].decode()
-        with open(os.path.join(self.notebook_search_path, notebook), "r") as f:
-            data = json.load(f)
+        try:
+            with open(os.path.join(self.notebook_search_path, notebook), "r") as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            raise tornado.web.HTTPError(
+                status_code=404,
+                reason=f"The path '{self.notebook_search_path}' does not exist!",
+            )
         self.write(data)
 
     def post(self):

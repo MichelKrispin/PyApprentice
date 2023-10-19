@@ -186,7 +186,13 @@ class HomeHandler(tornado.web.RequestHandler):
         self.notebook_search_path = notebook_search_path
 
     def get(self):
-        search_for_notebooks(self.notebooks, self.notebook_search_path)
+        try:
+            search_for_notebooks(self.notebooks, self.notebook_search_path)
+        except FileNotFoundError:
+            raise tornado.web.HTTPError(
+                status_code=404,
+                reason=f"The path '{self.notebook_search_path}' does not exist!",
+            )
         file_information = []
         for k in self.notebooks.keys():
             notebook = {
