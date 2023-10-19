@@ -137,6 +137,7 @@ class CellHandler:
         )
         cell["response"]["message"] = message
         self.save()
+        # return output, result
 
 
 def slugify(value):
