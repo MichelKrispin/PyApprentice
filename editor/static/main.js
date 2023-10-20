@@ -160,10 +160,6 @@ async function updateCell() {
       title: document.getElementById('title').value,
       'global-code': editorGlobalCode.session.getValue(),
       passed: 0,
-      response: {
-        display: 'none',
-        message: '',
-      },
     },
   };
 
@@ -283,6 +279,7 @@ function addCell() {
     text: '',
     title: '',
     response: { display: 'none', message: '' },
+    output: '',
     id: newId,
   });
 
